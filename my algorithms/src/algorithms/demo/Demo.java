@@ -25,7 +25,6 @@ public class Demo {
 		System.out.println(maze);
 		MazeAdapter m=new MazeAdapter(maze);
 		CommonSearcher<Position> searcher;
-		crapcrapcrap
 		List<State<Position>> solution;
 		System.out.println("--BFS Test:--");
 		searcher=new BFS<Position>();
