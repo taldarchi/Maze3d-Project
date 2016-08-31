@@ -40,6 +40,10 @@ public class Maze3d {
 		this.goalPosition=goal;
 	}
 	
+	public Maze3d(byte[] byteMaze){
+		
+	}
+	
 	
 	/**
 	 * Gets the maze 3 d.
@@ -210,5 +214,10 @@ public class Maze3d {
 			System.out.println();
 
 		}
+	}
+	
+	public byte[] toByteArray(){
+		return null;
+		
 	}
 }
