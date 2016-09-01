@@ -217,7 +217,30 @@ public class Maze3d {
 	}
 	
 	public byte[] toByteArray(){
-		return null;
+		byte[] b=new byte[maze3d.length*maze3d[0].length*maze3d[0][0].length+3+3+3];
+		int x=9;
+		
+		b[0]=(byte) startPosition.getZ(); //start position
+		b[1]=(byte) startPosition.getX();
+		b[2]=(byte) startPosition.getY();
+		
+		b[3]=(byte) goalPosition.getZ(); //goal position
+		b[4]=(byte) goalPosition.getX();
+		b[5]=(byte) goalPosition.getY();
+				
+				
+		b[6]=(byte) maze3d.length; //maze size
+		b[7]=(byte) maze3d[0].length;
+		b[8]=(byte) maze3d[0][0].length;
+		
+		for(int i=0;i<maze3d.length;i++)
+			for(int j=0;j<maze3d[0].length;j++)
+				for(int k=0;k<maze3d[0][0].length;k++){
+					b[x]=(byte) maze3d[i][j][k];
+					x++;
+				}
+		return b;
+		
 		
 	}
 }
