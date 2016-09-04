@@ -1,6 +1,7 @@
 package algorithms.mazeGenerators;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -41,7 +42,25 @@ public class Maze3d {
 	}
 	
 	public Maze3d(byte[] byteMaze){
+		this.startPosition=new Position();
+		this.goalPosition=new Position();
 		
+		this.startPosition.setZ(byteMaze[0]);
+		this.startPosition.setX(byteMaze[1]);
+		this.startPosition.setY(byteMaze[2]);
+		
+		this.goalPosition.setZ(byteMaze[3]);
+		this.goalPosition.setX(byteMaze[4]);
+		this.goalPosition.setY(byteMaze[5]);
+		
+		this.maze3d=new int[byteMaze[6]][byteMaze[7]][byteMaze[8]];
+		int x=9;
+		for(int i=0;i<maze3d.length;i++)
+			for(int j=0;j<maze3d[0].length;j++)
+				for(int k=0;k<maze3d[0][0].length;k++){
+					maze3d[i][j][k]=byteMaze[x];
+					x++;
+				}
 	}
 	
 	
@@ -242,5 +261,30 @@ public class Maze3d {
 		return b;
 		
 		
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Maze3d other = (Maze3d) obj;
+		if (goalPosition == null) {
+			if (other.goalPosition != null)
+				return false;
+		} else if (!goalPosition.equals(other.goalPosition))
+			return false;
+		if (!Arrays.deepEquals(maze3d, other.maze3d))
+			return false;
+		if (startPosition == null) {
+			if (other.startPosition != null)
+				return false;
+		} else if (!startPosition.equals(other.startPosition))
+			return false;
+		return true;
 	}
 }

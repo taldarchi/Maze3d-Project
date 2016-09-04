@@ -28,7 +28,7 @@ public class Demo {
 	public static void Run(){
 		//Maze3d maze=new SimpleMaze3dGenerator().generate(6, 15, 15);
 		//Maze3d maze=new GetLastCell().generate(6, 5, 5);
-		Maze3d maze=new GetRandomCell().generate(6, 15, 15);
+		Maze3d maze=new GetRandomCell().generate(10,10,10);
 		System.out.println(maze);
 		MazeAdapter m=new MazeAdapter(maze);
 		CommonSearcher<Position> searcher;
@@ -52,8 +52,7 @@ public class Demo {
 	 * @throws IOException 
 	 */
 	public static void ByteArrayTest() throws IOException{
-		Maze3d maze=new GetRandomCell().generate(4, 4, 4); //... generate it
-		System.out.println(maze.getMaze3d().length);
+		Maze3d maze=new GetRandomCell().generate(10, 10, 10); //... generate it
 		// save it to a file
 		OutputStream out=new MyCompressorOutputStream(
 		new FileOutputStream("1.maz"));
@@ -70,7 +69,7 @@ public class Demo {
 	}
 	
 	public static void main(String[] args) throws IOException{
-		//Run();
+		Run();
 		ByteArrayTest();
 		
 	}

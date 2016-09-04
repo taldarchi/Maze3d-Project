@@ -25,9 +25,12 @@ public class MyDecompressorInputStream extends InputStream {
 	}
 	@Override
     public int read(byte b[]) throws IOException {
-		byte temp[] = new byte[b.length-9];
+		byte temp[] = new byte[b.length];
 		in.read(temp);
-		int j=-1;
+		for(int i=0;i<9;i++)
+			b[i]=temp[i];
+	
+		int j=8;
 		for(int i=9;i<temp.length;i=i+2){
 			int times=temp[i];
 			while(times>0){

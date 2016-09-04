@@ -15,7 +15,7 @@ private static void testMazeGenerator(Maze3dGenerator mg){
 
 System.out.println(mg.measureAlgorithmTime(10,10,10));
 // generate another 3d maze
-Maze3d maze=mg.generate(4,4,4);
+Maze3d maze=mg.generate(10,10,10);
 // get the maze entrance
 Position p=maze.getStartPosition();
 // print the position
