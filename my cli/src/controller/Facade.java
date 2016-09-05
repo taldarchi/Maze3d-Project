@@ -1,5 +1,6 @@
 package controller;
 
-public interface Facade {
-
+public interface Facade{
+	
+	
 }

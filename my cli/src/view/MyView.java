@@ -14,4 +14,7 @@ public class MyView implements Facade {
 	public void start() throws IOException{
 		cli.start();
 	}
+	public CLI getCLI(){
+		return this.cli;
+	}
 }

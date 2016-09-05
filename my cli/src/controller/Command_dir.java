@@ -6,7 +6,7 @@ public class Command_dir implements Command {
 
 	@Override
 	public void doCommand() {
-		File folder = new File(this.toString());
+		File folder = new File();
 		File[] listOfFiles = folder.listFiles();
 
 		    for (int i = 0; i < listOfFiles.length; i++) {
