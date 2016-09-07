@@ -39,6 +39,7 @@ public class MyDecompressorInputStream extends InputStream {
 				b[j]=temp[i+1];
 			}
 		}
+		close();
 		return 0;
 	}
 }

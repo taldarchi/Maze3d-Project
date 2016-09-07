@@ -37,6 +37,7 @@ public class MyCompressorOutputStream extends OutputStream {
 			}
 			write(counter);
 			write(x);
+			close();
 		}
 	}
 

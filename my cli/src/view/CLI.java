@@ -2,14 +2,12 @@ package view;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import controller.Command;
-import controller.Command_dir;
-import controller.Command_exit;
 
 public class CLI extends Thread{
 
@@ -24,41 +22,78 @@ public class CLI extends Thread{
 		this.out = out;
 		this.map = map;
 	}
-	public CLI(){
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		PrintWriter out = new PrintWriter(System.out);
-		HashMap<String,Command> map=new HashMap<String,Command>();
-	}
 	
 	public void start(){
 		String line;
-	    System.out.println("Enter String");
+	    System.out.println("Please Choose a Command:\n\n"
+	    		+ "dir <path> - Display files/folders in the desired path\n"
+	    		+ "generate_3d_maze <name> <(X,Y,Z)> - Create a maze with desired parameters\n"
+	    		+ "display <name> - Print maze\n"
+	    		+ "display_cross_section <index {X,Y,Z}> <name> - Display 2d array of the desired index in a maze\n"
+	    		+ "save_maze <name> <file name> - Save maze\n"
+	    		+ "load_maze <file name> <name> - Load maze\n"
+	    		+ "solve <name> <algorithm> - Solve desired maze with desired algorithm\n"
+	    		+ "display_solution <name> - Display solution\n"
+	    		+ "exit - Close and exit everything\n");
 		try {
-			while((line=in.readLine())!="exit"){	
+			while(!(line=in.readLine()).equalsIgnoreCase("exit")){
+				try{
 				Scanner s = new Scanner(line);
+				String string = new String();
 				String command=s.next();
-				
 				if(map.containsKey(command))
 					switch (command){
 					case "dir":
-						Command_dir dir=(Command_dir) map.get("dir");
-						command=s.next();
-						out.write(command);						    
-							
+						Command dir=map.get("dir");
+						boolean bool=true;
+						while(s.hasNext()){
+							if(bool){
+								string+=s.next();
+								bool=false;
+							}
+							else
+								string+=" "+s.next();
+						}
+						dir.doCommand(string);
+						s.close();
+						break;
+					case "generate_3d_maze":
+						Command generate=map.get("generate_3d_maze");
+						while(s.hasNext())
+							string+=s.next()+ " ";
+						generate.doCommand(string);
+						s.close();
+						break;
+					case "display":
+						s.close();
+						break;
+					case "display_cross_section":
+						s.close();
+						break;
+					case "save_maze":
+						s.close();
+						break;
+					case "load_maze":
+						s.close();
+						break;
+					case "solve":
+						s.close();
+						break;
+					case "display_solution":
+						s.close();
+						break;
 					default:
-						System.out.println("No such command.");
+						System.out.println("No such command");
+						break;
 					}
-				s.close();
+				else
+					System.out.println("No such command");
+			}catch(NoSuchElementException e){}
 			}
-			Command_exit exit=(Command_exit) map.get("exit");
-			exit.doCommand();
-			
+		// exit stuff
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-
 	}
 
 	public PrintWriter getCommand() {

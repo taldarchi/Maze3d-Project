@@ -1,20 +1,22 @@
 package controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 
 import model.MyModel;
-import view.CLI;
 import view.MyView;
 
-public class MyController implements Facade{
+public class MyController{
 	private MyView view;
 	private MyModel model;
-	
-	public MyController(MyModel model, MyView view){
+
+	public MyController(MyView view, MyModel model){
 	      this.model = model;
 	      this.view = view;
+	   }
+	public void start(BufferedReader in, PrintWriter out) throws IOException {
 		  HashMap<String,Command> map=new HashMap<String,Command>();
 		  map.put("dir", new Command_dir());
 		  map.put("generate_3d_maze", new Command_generate_3d_maze());
@@ -25,18 +27,7 @@ public class MyController implements Facade{
 		  map.put("solve", new Command_solve());
 		  map.put("display_solution", new Command_display_solution());
 		  map.put("exit", new Command_exit());
-		  
-	    		  
-	   }
-	
-	public void work() throws IOException{
-		view.start();
-		CLI cli=view.getCLI();
-		PrintWriter command=cli.getCommand();
-		String s=command.toString();
-		
+		  view.start(in, out, map);
 		
 	}
-
-
 }
