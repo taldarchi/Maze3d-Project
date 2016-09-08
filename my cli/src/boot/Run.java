@@ -15,7 +15,7 @@ public class Run {
 		MyView view=new MyView();
 		MyModel model=new MyModel();
 		MyController controller=new MyController(view,model);
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in)); //stream
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in)); //standart streams
 	    PrintWriter out = new PrintWriter(System.out);
 		controller.start(in,out);
 
