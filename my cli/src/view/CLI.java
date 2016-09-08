@@ -14,6 +14,7 @@ public class CLI{
 	private BufferedReader in;
 	private PrintWriter out;
 	private HashMap<String,Command> map;
+	boolean exit=false;
 	
 	
 	public CLI(BufferedReader in, PrintWriter out, HashMap<String, Command> map) {
@@ -24,19 +25,19 @@ public class CLI{
 	}
 	
 	public void start(){
-	    System.out.println("Please Choose a Command:\n\n"
+	    out.println("Please Choose a Command:\n\n"
 	    		+ "dir <path> - Display files/folders in the desired path\n"
-	    		+ "generate_3d_maze <name> <X,Y,Z> - Create a maze with desired parameters\n"
+	    		+ "generate_3d_maze <name> <X,Y,Z> <algorithm(simple/growing_tree_random/growing_tree_last> - Create a maze with desired parameters\n"
 	    		+ "display <name> - Print maze\n"
-	    		+ "display_cross_section <X/Y/Z> <index> <name> - Display 2d array of the desired index in a maze\n"
+	    		+ "display_cross_section <name> <X/Y/Z> <index> - Display 2d array of the desired index in a maze\n"
 	    		+ "save_maze <name> <file name> - Save maze\n"
 	    		+ "load_maze <file name> <name> - Load maze\n"
 	    		+ "solve <name> <algorithm> - Solve desired maze with desired algorithm\n"
 	    		+ "display_solution <name> - Display solution\n"
 	    		+ "exit - Close and exit everything\n");
-//		new Thread(new Runnable(){
-//			@Override
-//			public void run() { 
+		new Thread(new Runnable(){
+			@Override
+			public void run() { 
 				try {
 				String line;
 				while(!(line=in.readLine()).equalsIgnoreCase("exit")){
@@ -89,33 +90,43 @@ public class CLI{
 							s.close();
 							break;
 						case "load_maze":
+							Command load_maze=map.get("load_maze");
+							while(s.hasNext())
+								string+=s.next()+ " ";
+							load_maze.doCommand(string);
 							s.close();
 							break;
 						case "solve":
+							Command solve=map.get("solve");
+							while(s.hasNext())
+								string+=s.next()+ " ";
+							solve.doCommand(string);
 							s.close();
 							break;
 						case "display_solution":
+							Command display_solution=map.get("display_solution");
+							while(s.hasNext())
+								string+=s.next();
+							display_solution.doCommand(string);
 							s.close();
 							break;
 						default:
-							System.out.println("No such command");
+							out.println("No such command");
 							break;
 						}
 					else
-						System.out.println("No such command");
+						out.println("No such command");
 				}catch(NoSuchElementException e){}
 				
-				// exit stuff
 				}
+				Command exit=map.get("exit");
+				exit.doCommand(null);
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-//		    }
-//		    }).start();
+		    }
+		    }).start();
 	}
-	public PrintWriter getCommand() {
-		return this.out;
-	}
-
 
 }

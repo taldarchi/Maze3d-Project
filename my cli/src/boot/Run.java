@@ -12,12 +12,14 @@ import view.MyView;
 public class Run {
 
 	public static void main(String[] args) throws IOException {
-		MyView view=new MyView();
-		MyModel model=new MyModel();
-		MyController controller=new MyController(view,model);
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in)); //standart streams
-	    PrintWriter out = new PrintWriter(System.out);
-		controller.start(in,out);
+	    PrintWriter out = new PrintWriter(System.out, true);
+	    MyView view=new MyView(in,out);
+	    MyModel model=new MyModel();
+	    MyController controller=new MyController(view,model);
+	    view.setController(controller);
+	    model.setController(controller);
+	    view.start();
 
 	}
 
