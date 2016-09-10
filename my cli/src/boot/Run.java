@@ -1,7 +1,7 @@
 /**
  * @file Run.java
  * 
- * @author Tal Darchi
+ * @author Tal Darchi and Sharon Lapidot
  * 
  * @description main method implementation
  * 				

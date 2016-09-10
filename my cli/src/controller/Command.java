@@ -1,7 +1,7 @@
 /**
  * @file Command.java
  * 
- * @author Tal Darchi
+ * @author Tal Darchi and Sharon Lapidot
  * 
  * @description an interface for the commands in the MVC
  * 				

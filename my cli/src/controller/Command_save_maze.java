@@ -1,7 +1,7 @@
 /**
  * @file Command_load_maze.java
  * 
- * @author Tal Darchi
+ * @author Tal Darchi and Sharon Lapidot
  * 
  * @description represents a command responsible to 
  *              save a desired maze to a file in a specific name.

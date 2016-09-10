@@ -1,7 +1,7 @@
 /**
  * @file MyModel.java
  * 
- * @author Tal Darchi
+ * @author Tal Darchi and Sharon Lapidot
  * 
  * @description implementation of the model
  * 				
@@ -105,9 +105,8 @@ public class MyModel implements Model {
 	public Maze3d loadMaze(String fileName, String nameToSave) throws IOException
 	{
 		try{
-		Maze3d maze = new Maze3d();
 		InputStream in=new MyDecompressorInputStream(new FileInputStream(fileName));
-		byte b[]=new byte[maze.toByteArray().length];
+		byte b[]=new byte[1000000];
 		in.read(b);
 		in.close();
 		Maze3d loaded=new Maze3d(b);

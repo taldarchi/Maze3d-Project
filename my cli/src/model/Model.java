@@ -1,7 +1,7 @@
 /**
  * @file Model.java
  * 
- * @author Tal Darchi
+ * @author Tal Darchi and Sharon Lapidot
  * 
  * @description interface for the model in the MVC
  * 				

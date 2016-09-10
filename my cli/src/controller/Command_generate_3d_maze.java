@@ -1,7 +1,7 @@
 /**
  * @file Command_generate_3d_maze.java
  * 
- * @author Tal Darchi
+ * @author Tal Darchi and Sharon Lapidot
  * 
  * @description represents a command responsible to 
  *              generate a maze in the model.

@@ -1,7 +1,7 @@
 /**
  * @file Command_dir.java
  * 
- * @author Tal Darchi
+ * @author Tal Darchi and Sharon Lapidot
  * 
  * @description represents a command responsible to make the project exit without any threads or streams open.
  * 				

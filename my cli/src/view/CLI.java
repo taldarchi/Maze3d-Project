@@ -1,7 +1,7 @@
 /**
  * @file CLI.java
  * 
- * @author Tal Darchi
+ * @author Tal Darchi and Sharon Lapidot
  * 
  * @description represents the command line interface with the user
  * 				
@@ -55,9 +55,9 @@ public class CLI{
 	 * runs on a partial thread.
 	 */
 	public void start(){
-	    out.println("Please Choose a Command:\n\n"
+	    out.println("\nPlease Choose a Command:\n\n"
 	    		+ "dir <path> - Display files/folders in the desired path\n"
-	    		+ "generate_3d_maze <name> <X,Y,Z> <algorithm(simple/growing_tree_random/growing_tree_last> - Create a maze with desired parameters\n"
+	    		+ "generate_3d_maze <name> <X,Y,Z> <algorithm> - Create a maze with desired parameters\n"
 	    		+ "display <name> - Print maze\n"
 	    		+ "display_cross_section <name> <X/Y/Z> <index> - Display 2d array of the desired index in a maze\n"
 	    		+ "save_maze <name> <file name> - Save maze\n"

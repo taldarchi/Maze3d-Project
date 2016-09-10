@@ -1,7 +1,7 @@
 /**
  * @file Command_solve.java
  * 
- * @author Tal Darchi
+ * @author Tal Darchi and Sharon Lapidot
  * 
  * @description represents a command responsible to 
  *              solve a maze with a desired algorithm.

@@ -1,7 +1,7 @@
 /**
  * @file Command_display.java
  * 
- * @author Tal Darchi
+ * @author Tal Darchi and Sharon Lapidot
  * 
  * @description represents a command responsible to display maze.
  * 				

@@ -1,7 +1,7 @@
 /**
  * @file Command_display_cross_section.java
  * 
- * @author Tal Darchi
+ * @author Tal Darchi and Sharon Lapidot
  * 
  * @description tells view to return a 2d array of the maze in the desired index of the desired axis.
  * 				

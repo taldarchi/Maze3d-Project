@@ -1,7 +1,7 @@
 /**
  * @file Command_dir.java
  * 
- * @author Tal Darchi
+ * @author Tal Darchi and Sharon Lapidot
  * 
  * @description represents a command responsible to 
  *              show the folders and/or files in desired dir.

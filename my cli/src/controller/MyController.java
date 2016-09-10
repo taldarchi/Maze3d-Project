@@ -1,7 +1,7 @@
 /**
  * @file MyController.java
  * 
- * @author Tal Darchi
+ * @author Tal Darchi and Sharon Lapidot
  * 
  * @description implementation of the controller 
  * 				

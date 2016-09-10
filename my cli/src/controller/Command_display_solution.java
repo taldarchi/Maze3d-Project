@@ -1,7 +1,7 @@
 /**
  * @file Command_display_solution.java
  * 
- * @author Tal Darchi
+ * @author Tal Darchi and Sharon Lapidot
  * 
  * @description command responsible to tell view to print maze solution to the screen
  * 				

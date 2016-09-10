@@ -1,7 +1,7 @@
 /**
  * @file Controller.java
  * 
- * @author Tal Darchi
+ * @author Tal Darchi and Sharon Lapidot
  * 
  * @description Facade interface for the controller
  * 				

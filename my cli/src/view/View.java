@@ -1,7 +1,7 @@
 /**
  * @file View.java
  * 
- * @author Tal Darchi
+ * @author Tal Darchi and Sharon Lapidot
  * 
  * @description interface for the view in the MVC
  * 				
