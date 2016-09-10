@@ -1,3 +1,12 @@
+/**
+ * @file CLI.java
+ * 
+ * @author Tal Darchi
+ * 
+ * @description represents the command line interface with the user
+ * 				
+ * @date    08/09/2016
+ */
 package view;
 
 import java.io.BufferedReader;
@@ -9,14 +18,30 @@ import java.util.Scanner;
 
 import controller.Command;
 
+/**
+ * The Class CLI.
+ */
 public class CLI{
 
+	/** The in. */
 	private BufferedReader in;
+	
+	/** The out. */
 	private PrintWriter out;
+	
+	/** The map. */
 	private HashMap<String,Command> map;
+	
+	/** The exit. */
 	boolean exit=false;
 	
-	
+	/**
+	 * Instantiates a new cli.
+	 *
+	 * @param in the in
+	 * @param out the out
+	 * @param map the map
+	 */
 	public CLI(BufferedReader in, PrintWriter out, HashMap<String, Command> map) {
 		super();
 		this.in = in;
@@ -24,6 +49,11 @@ public class CLI{
 		this.map = map;
 	}
 	
+	/**
+	 * Start.
+	 * gets commands from user and analyses them.
+	 * runs on a partial thread.
+	 */
 	public void start(){
 	    out.println("Please Choose a Command:\n\n"
 	    		+ "dir <path> - Display files/folders in the desired path\n"
@@ -40,12 +70,14 @@ public class CLI{
 			public void run() { 
 				try {
 				String line;
+				//while loop until user types 'exit'
 				while(!(line=in.readLine()).equalsIgnoreCase("exit")){
 					try{
 					Scanner s = new Scanner(line);
 					String string = new String();
 					String command=s.next();
 					if(map.containsKey(command))
+						//handle the string by the user, send arguments only
 						switch (command){
 						case "dir":
 							Command dir=map.get("dir");

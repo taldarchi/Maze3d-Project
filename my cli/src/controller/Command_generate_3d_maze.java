@@ -1,16 +1,40 @@
+/**
+ * @file Command_generate_3d_maze.java
+ * 
+ * @author Tal Darchi
+ * 
+ * @description represents a command responsible to 
+ *              generate a maze in the model.
+ * 				
+ * @date    08/09/2016
+ */
 package controller;
 
 import model.Model;
 
+/**
+ * The Class Command_generate_3d_maze.
+ */
 public class Command_generate_3d_maze implements Command {
 	
+	/** The model. */
 	private Model model;
+	
+	/**
+	 * Instantiates a new command generate 3 d maze.
+	 *
+	 * @param model the model
+	 */
 	public Command_generate_3d_maze(Model model){
 		this.model=model;
 	}
 
+	/* (non-Javadoc)
+	 * @see controller.Command#doCommand(java.lang.String)
+	 */
 	@Override
 	public void doCommand(String string) {
+		//check for errors first
 		String[] strings=string.split(" |,");
 		if(strings.length!=5)
 			System.out.println("Bad parameters, try again");

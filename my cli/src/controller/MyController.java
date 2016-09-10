@@ -1,3 +1,12 @@
+/**
+ * @file MyController.java
+ * 
+ * @author Tal Darchi
+ * 
+ * @description implementation of the controller 
+ * 				
+ * @date    08/09/2016
+ */
 package controller;
 
 import java.util.HashMap;
@@ -6,12 +15,28 @@ import model.MyModel;
 import view.MyView;
 import view.View;
 
+/**
+ * The Class MyController.
+ */
 public class MyController implements Controller{
+	
+	/** The view. */
 	private View view;
+	
+	/**
+	 * Instantiates a new my controller.
+	 */
 	public MyController(){
 		new MyView();
 		new MyModel();
 	}
+	
+	/**
+	 * Instantiates a new my controller,
+	 * initialize the HashMap and set it at view.
+	 * @param view the view
+	 * @param model the model
+	 */
 	public MyController(MyView view, MyModel model){
 	      this.view = view;
 	      HashMap<String,Command> map=new HashMap<String,Command>();
@@ -27,6 +52,10 @@ public class MyController implements Controller{
 		  view.setMap(map);
 	}
 	
+	/* (non-Javadoc)
+	 * @see controller.Controller#Print(java.lang.String)
+	 */
+	//print specific message to user
 	@Override
 	public void Print(String string) 
 	{

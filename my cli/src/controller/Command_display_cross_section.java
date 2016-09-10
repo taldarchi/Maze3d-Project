@@ -1,19 +1,46 @@
+/**
+ * @file Command_display_cross_section.java
+ * 
+ * @author Tal Darchi
+ * 
+ * @description tells view to return a 2d array of the maze in the desired index of the desired axis.
+ * 				
+ * @date    08/09/2016
+ */
 package controller;
 
 import algorithms.mazeGenerators.Maze3d;
 import model.Model;
 import view.View;
 
+/**
+ * The Class Command_display_cross_section.
+ */
 public class Command_display_cross_section implements Command {
+	
+	/** The view. */
 	private View view;
+	
+	/** The model. */
 	private Model model;
+	
+	/**
+	 * Instantiates a new command display cross section.
+	 *
+	 * @param view the view
+	 * @param model the model
+	 */
 	public Command_display_cross_section(View view, Model model){
 		this.view=view;
 		this.model=model;
 	}
 
+	/* (non-Javadoc)
+	 * @see controller.Command#doCommand(java.lang.String)
+	 */
 	@Override
 	public void doCommand(String string) {
+		//get information from string before telling view
 		String[] strings=string.split(" ");
 		if(strings.length!=3)
 			System.out.println("Bad parameters, try again");

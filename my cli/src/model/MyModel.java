@@ -1,3 +1,12 @@
+/**
+ * @file MyModel.java
+ * 
+ * @author Tal Darchi
+ * 
+ * @description implementation of the model
+ * 				
+ * @date    08/09/2016
+ */
 package model;
 
 import java.io.FileInputStream;
@@ -24,13 +33,26 @@ import controller.Controller;
 import io.MyCompressorOutputStream;
 import io.MyDecompressorInputStream;
 
+/**
+ * The Class MyModel.
+ */
 public class MyModel implements Model {
 
+	/** The my controller. */
 	private Controller m_controller;
+	
+	/** The mazes. */
 	private HashMap<String,Maze3d> mazes=new HashMap<String,Maze3d>();
+	
+	/** The solutions. */
 	private HashMap<String,List<State<Position>>> solutions=new HashMap<String,List<State<Position>>>();
 	
 
+	/* (non-Javadoc)
+	 * @see model.Model#generate3dMaze(java.lang.String, int, int, int, java.lang.String)
+	 * 
+	 * generation of the 3d maze from the parameters 
+	 */
 	@Override
 	public void generate3dMaze(String name,int z,int x, int y, String algorithm) {
 		new Thread(new Runnable(){
@@ -59,6 +81,11 @@ public class MyModel implements Model {
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see model.Model#saveMaze(java.lang.String, java.lang.String)
+	 * 
+	 * save maze to a file with filename
+	 */
 	@Override
 	public void saveMaze(String name, String fileName) throws IOException {
 		Maze3d maze=mazes.get(name);
@@ -69,6 +96,11 @@ public class MyModel implements Model {
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see model.Model#loadMaze(java.lang.String, java.lang.String)
+	 * 
+	 * load maze from a file with filename and save to nameToSave
+	 */
 	@Override
 	public Maze3d loadMaze(String fileName, String nameToSave) throws IOException
 	{
@@ -86,6 +118,11 @@ public class MyModel implements Model {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see model.Model#solveMaze(java.lang.String, java.lang.String)
+	 * 
+	 * solve maze with desired algorithm
+	 */
 	@Override
 	public void solveMaze(String mazeName, String algorithm) {
 		new Thread(new Runnable(){
@@ -121,16 +158,31 @@ public class MyModel implements Model {
 
 		
 	}
+	
+	/* (non-Javadoc)
+	 * @see model.Model#mazeNameCheck(java.lang.String)
+	 * 
+	 * check if the maze name already exists
+	 */
 	@Override
 	public boolean mazeNameCheck(String name){
 		return mazes.containsKey(name);
 	}
 
+	/* (non-Javadoc)
+	 * @see model.Model#setController(controller.Controller)
+	 */
 	@Override
 	public void setController(Controller controller) {
 		this.m_controller=controller;
 		
 	}
+	
+	/* (non-Javadoc)
+	 * @see model.Model#getMazeByName(java.lang.String)
+	 * 
+	 * returns a maze by desired name
+	 */
 	@Override
 	public Maze3d getMazeByName(String name){
 		if(!mazes.containsKey(name))
@@ -143,6 +195,11 @@ public class MyModel implements Model {
 	}
 		
 
+	/* (non-Javadoc)
+	 * @see model.Model#getSolutions()
+	 * 
+	 * returns the solutions
+	 */
 	public HashMap<String, List<State<Position>>> getSolutions() {
 		return solutions;
 	}
