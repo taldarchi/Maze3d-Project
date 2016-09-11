@@ -10,10 +10,12 @@
 package view;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
+import presenter.Command;
 
 /**
  * The Interface View.
@@ -62,6 +64,7 @@ public interface View {
 	 * @param m2dmaze the m 2 dmaze
 	 */
 	public void displayCrossSection(int[][]m2dmaze);
+	public HashMap<String, Command> getMap();
 	
 
 }

@@ -7,7 +7,7 @@
  * 				
  * @date    08/09/2016
  */
-package controller;
+package presenter;
 
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;

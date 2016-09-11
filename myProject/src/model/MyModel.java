@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.Observable;
 
 import algorithms.demo.MazeAdapter;
 import algorithms.mazeGenerators.GetLastCell;
@@ -27,24 +28,19 @@ import algorithms.search.BFS;
 import algorithms.search.CommonSearcher;
 import algorithms.search.DFS;
 import algorithms.search.Solution;
-import controller.Controller;
 import io.MyCompressorOutputStream;
 import io.MyDecompressorInputStream;
 
 /**
  * The Class MyModel.
  */
-public class MyModel implements Model {
-
-	/** The my controller. */
-	private Controller m_controller;
+public class MyModel extends Observable implements Model {
 	
 	/** The mazes. */
 	private HashMap<String,Maze3d> mazes=new HashMap<String,Maze3d>();
 	
 	/** The solutions. */
 	private HashMap<String,Solution<Position>> solutions=new HashMap<String,Solution<Position>>();
-	
 
 	/* (non-Javadoc)
 	 * @see model.Model#generate3dMaze(java.lang.String, int, int, int, java.lang.String)
@@ -72,8 +68,8 @@ public class MyModel implements Model {
 		}
 			String mazeName=name;
 			String message = String.format("Maze %s is ready", mazeName);
-			m_controller.Print(message);
-		
+			setChanged();
+			notifyObservers(message);
 	}
   }).start();
 		
@@ -110,7 +106,9 @@ public class MyModel implements Model {
 		Maze3d loaded=new Maze3d(b);
 		mazes.put(nameToSave, loaded);
 		}catch(FileNotFoundException e){
-			  m_controller.Print("File not found, try again");
+			String message="File not found, try again";
+			setChanged();
+			notifyObservers(message);
 		}
 		return null;
 	}
@@ -130,8 +128,11 @@ public class MyModel implements Model {
 					CommonSearcher<Position> searcher;
 					//List<State<Position>> solution = null;
 					Solution<Position> solution;
-					if(!algorithm.equals("bfs")&&!algorithm.equals("BFS")&&!algorithm.equals("dfs")&&!algorithm.equals("DFS"))
-						m_controller.Print("Cant find search algorithm, try again");
+					if(!algorithm.equals("bfs")&&!algorithm.equals("BFS")&&!algorithm.equals("dfs")&&!algorithm.equals("DFS")){
+						String message="Cant find search algorithm, try again";
+						setChanged();
+						notifyObservers(message);
+					}
 					else{
 						switch(algorithm){
 						case "bfs":
@@ -148,13 +149,11 @@ public class MyModel implements Model {
 							break;
 						}
 						String message = String.format("Solution for %s (%s) is ready", mazeName,algorithm);
-						m_controller.Print(message);
+						setChanged();
+						notifyObservers(message);
 					}
 			}
  		}).start();
-
-
-		
 	}
 	
 	/* (non-Javadoc)
@@ -167,14 +166,6 @@ public class MyModel implements Model {
 		return mazes.containsKey(name);
 	}
 
-	/* (non-Javadoc)
-	 * @see model.Model#setController(controller.Controller)
-	 */
-	@Override
-	public void setController(Controller controller) {
-		this.m_controller=controller;
-		
-	}
 	
 	/* (non-Javadoc)
 	 * @see model.Model#getMazeByName(java.lang.String)
@@ -183,8 +174,11 @@ public class MyModel implements Model {
 	 */
 	@Override
 	public Maze3d getMazeByName(String name){
-		if(!mazes.containsKey(name))
-			  m_controller.Print("Maze not found, try again");
+		if(!mazes.containsKey(name)){
+			String message="Maze not found, try again";
+			setChanged();
+			notifyObservers(message);
+		}
 		else{
 			Maze3d maze=mazes.get(name);
 			return maze;
@@ -201,8 +195,5 @@ public class MyModel implements Model {
 	public HashMap<String, Solution<Position>> getSolutions() {
 		return solutions;
 	}
-
-
-
 
 }

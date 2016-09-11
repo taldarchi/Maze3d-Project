@@ -15,19 +15,11 @@ import java.util.HashMap;
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
-import controller.Controller;
 
 /**
  * The Interface Model.
  */
 public interface Model {
-	
-	/**
-	 * Sets the controller.
-	 *
-	 * @param controllerToCommunicate the new controller
-	 */
-	public void setController(Controller controller);
 	
 	/**
 	 * Load maze.

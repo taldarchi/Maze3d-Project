@@ -15,24 +15,21 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Observable;
 
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
-import controller.Command;
-import controller.Controller;
-import controller.MyController;
+import presenter.Command;
+import presenter.Presenter;
 
 /**
  * The Class MyView.
  */
-public class MyView implements View {
+public class MyView extends Observable implements View {
 	
 	/** The cli. */
 	private CLI cli;
-	
-	/** The m controller. */
-	private Controller m_controller;
 	
 	/** The in. */
 	private BufferedReader in;
@@ -40,12 +37,10 @@ public class MyView implements View {
 	/** The out. */
 	private PrintWriter out;
 	
-	/** The map is set. */
-	private boolean mapIsSet=false;
-	
 	/** The map. */
 	private HashMap<String, Command> map;
-
+	
+	private Presenter m_presenter;
 	
 	/**
 	 * Instantiates a new my view.
@@ -71,12 +66,7 @@ public class MyView implements View {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public void start() throws IOException{
-		if (mapIsSet != true){
-			out.println("Map is not set yet");
-			out.flush();
-			return;
-		}
-		this.cli=new CLI(in,out,map);
+		this.cli=new CLI(in,out,map,m_presenter);
 		cli.start();
 	}
 
@@ -145,15 +135,6 @@ public class MyView implements View {
 		out.close();
 		System.exit(0);
 	}
-
-	/**
-	 * Sets the controller.
-	 *
-	 * @param controller the new controller
-	 */
-	public void setController(MyController controller) {
-		this.m_controller=controller;
-	}
 	
 	/**
 	 * Sets the map.
@@ -162,16 +143,13 @@ public class MyView implements View {
 	 */
 	public void setMap(HashMap<String, Command> map) {
 		this.map = map;
-		this.mapIsSet=true;
 	}
 	
-	/**
-	 * Gets the m controller.
-	 *
-	 * @return the m controller
-	 */
-	public Controller getM_controller() {
-		return m_controller;
+	public HashMap<String, Command> getMap() {
+		return map;
+	}
+	public void setPresenter(Presenter presenter) {
+		this.m_presenter=presenter;
 	}
 
 }
