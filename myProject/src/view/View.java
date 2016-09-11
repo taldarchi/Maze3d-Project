@@ -64,7 +64,27 @@ public interface View {
 	 * @param m2dmaze the m 2 dmaze
 	 */
 	public void displayCrossSection(int[][]m2dmaze);
+	
+	/**
+	 * Gets the map.
+	 *
+	 * @return the map
+	 */
 	public HashMap<String, Command> getMap();
+	
+	/**
+	 * Execute command.
+	 *
+	 * @param string the string
+	 */
+	public void executeCommand(String string);
+	
+	/**
+	 * Gets the line.
+	 *
+	 * @return the line
+	 */
+	public String getLine();
 	
 
 }

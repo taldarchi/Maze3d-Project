@@ -16,12 +16,12 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Observable;
+import java.util.Scanner;
 
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
 import presenter.Command;
-import presenter.Presenter;
 
 /**
  * The Class MyView.
@@ -39,8 +39,6 @@ public class MyView extends Observable implements View {
 	
 	/** The map. */
 	private HashMap<String, Command> map;
-	
-	private Presenter m_presenter;
 	
 	/**
 	 * Instantiates a new my view.
@@ -66,7 +64,7 @@ public class MyView extends Observable implements View {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public void start() throws IOException{
-		this.cli=new CLI(in,out,map,m_presenter);
+		this.cli=new CLI(this);
 		cli.start();
 	}
 
@@ -145,11 +143,41 @@ public class MyView extends Observable implements View {
 		this.map = map;
 	}
 	
+	/* (non-Javadoc)
+	 * @see view.View#getMap()
+	 */
 	public HashMap<String, Command> getMap() {
 		return map;
 	}
-	public void setPresenter(Presenter presenter) {
-		this.m_presenter=presenter;
+
+	/* (non-Javadoc)
+	 * @see view.View#executeCommand(java.lang.String)
+	 */
+	public void executeCommand(String string){
+		Scanner s = new Scanner(string);
+		String command=s.next();
+		if(map.containsKey(command)){
+			setChanged();
+			notifyObservers(string);
+			s.close();
+		}
+		else
+			printMessage("No such command");
+		s.close();
+	}
+		
+	/* (non-Javadoc)
+	 * @see view.View#getLine()
+	 */
+	public String getLine(){
+		try {
+			String line = new String (in.readLine());
+			return line;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+
 	}
 
 }

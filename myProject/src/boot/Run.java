@@ -30,14 +30,11 @@ public class Run {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public static void main(String[] args) throws IOException {
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-	    PrintWriter out = new PrintWriter(System.out, true);
-	    MyView view=new MyView(in,out);
+	    MyView view=new MyView(new BufferedReader(new InputStreamReader(System.in)), new PrintWriter(System.out, true));
 		MyModel model=new MyModel();
 		Presenter p=new Presenter(view,model);
 		view.addObserver(p);
 		model.addObserver(p);
-		view.setPresenter(p);
 		view.start();
 	}
 

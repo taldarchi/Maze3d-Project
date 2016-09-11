@@ -9,59 +9,52 @@
  */
 package view;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Observable;
-import java.util.Scanner;
-
-import presenter.Command;
-import presenter.Presenter;
-
-
 
 /**
  * The Class CLI.
  */
-public class CLI extends Observable{
-
-	/** The in. */
-	private BufferedReader in;
+public class CLI{
 	
-	/** The out. */
-	private PrintWriter out;
-	
-	/** The map. */
-	private HashMap<String,Command> map;
-	
-	/** The exit. */
-	boolean exit=false;
+	/** The view. */
+	private MyView view;
 	
 	/**
 	 * Instantiates a new cli.
 	 *
-	 * @param in the in
-	 * @param out the out
-	 * @param map the map
-	 * @param m_presenter 
+	 * @param view the view
 	 */
-	public CLI(BufferedReader in, PrintWriter out, HashMap<String, Command> map, Presenter m_presenter) {
-		super();
-		this.in = in;
-		this.out = out;
-		this.map = map;
-		this.addObserver(m_presenter);
+	public CLI(MyView view){
+		this.view=view;
 	}
 	
 	/**
 	 * Start.
 	 * gets commands from user and analyses them.
 	 * runs on a partial thread.
-	 * @throws IOException 
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public void start() throws IOException{
-	    out.println("\nPlease Choose a Command:\n\n"
+
+	new Thread(new Runnable(){
+		@Override
+		public void run() {
+			printMenu();
+			while(true){
+				String command=getLineFromView();
+				view.executeCommand(command);
+			}
+		}
+	}).start();	
+	
+	}
+	
+	/**
+	 * Prints the menu.
+	 */
+	public void printMenu(){
+	    this.view.printMessage("\nPlease Choose a Command:\n\n"
 	    		+ "dir <path> - Display files/folders in the desired path\n"
 	    		+ "generate_3d_maze <name> <X,Y,Z> <algorithm> - Create a maze with desired parameters\n"
 	    		+ "display <name> - Print maze\n"
@@ -71,26 +64,14 @@ public class CLI extends Observable{
 	    		+ "solve <name> <algorithm> - Solve desired maze with desired algorithm\n"
 	    		+ "display_solution <name> - Display solution\n"
 	    		+ "exit - Close and exit everything\n");
-	new Thread(new Runnable(){
-		@Override
-		public void run() { 
-			try{
-			while(true){
-				String line=new String (in.readLine());
-				Scanner s = new Scanner(line);
-				String command=s.next();
-				if(map.containsKey(command)){
-	    		setChanged();
-	    		notifyObservers(line);
-			}
-	    	else
-	    		out.println("No such command");
-	    	s.close();
-			}
-			} catch (IOException e) {
-				e.printStackTrace();}
-		}
-	}).start();
+	}
 	
+	/**
+	 * Gets the line from view.
+	 *
+	 * @return the line from view
+	 */
+	public String getLineFromView() {
+		return this.view.getLine();
 }
 }

@@ -14,11 +14,10 @@ import view.View;
 public class Presenter implements Observer{
 	
 	private Observable view;
-	@SuppressWarnings("unused")
 	private Model model;
 	
 	public Presenter(MyView view, MyModel model){
-	      this.view = view;
+	      this.view=view;
 	      this.model=model;
 	      HashMap<String,Command> map=new HashMap<String,Command>();
 		  map.put("dir", new Command_dir(view));
@@ -35,7 +34,7 @@ public class Presenter implements Observer{
 
 	@Override
 	public void update(Observable o, Object arg) {
-		if(o.getClass().getName().contains("view")){
+		if(o==view){
 			try {
 			String line=new String((String)arg);
 			Scanner s = new Scanner(line);
@@ -113,7 +112,7 @@ public class Presenter implements Observer{
 					e.printStackTrace();
 				}
 		}
-		if(o.getClass().getName().contains("model")){
+		if(o==model){
 			String s=(String)arg;
 			((View) view).printMessage(s);
 		}
