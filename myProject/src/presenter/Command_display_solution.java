@@ -9,6 +9,7 @@
  */
 package presenter;
 
+import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
 import model.Model;
@@ -30,9 +31,10 @@ public class Command_display_solution implements Command {
 			view.printMessage("Bad parameters, try again");
 		else{
 			String name=strings[0];
+			Maze3d maze=model.getMazes().get(name);
 			if(!model.mazeNameCheck(name))
 				view.printMessage("Maze does not exist, try again");
-			else if(!model.solutionExists(model.getMazes().get(name)))
+			else if(!model.solutionExists(maze))
 				view.printMessage("Solution does not exist yet for "+name);
 			else{
 				Solution<Position> solution=model.getSolutions().get(model.getMazes().get(name));

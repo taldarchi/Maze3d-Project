@@ -39,7 +39,7 @@ import io.MyDecompressorInputStream;
 public class MyModel extends Observable implements Model{
 	
 	/**
-	 * 
+	 *
 	 */
 	ExecutorService executor = Executors.newCachedThreadPool();
 	/** The mazes. */
@@ -208,7 +208,9 @@ public class MyModel extends Observable implements Model{
 	        if(!(readObject instanceof HashMap)) throw new IOException("Data is not a hashmap");
 	        solutions = (HashMap<Maze3d, Solution<Position>>) readObject;
 		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
+			String message="File not found, try again";
+			setChanged();
+			notifyObservers(message);
 		}
 
 		
@@ -217,5 +219,31 @@ public class MyModel extends Observable implements Model{
 	public HashMap<String, Maze3d> getMazes() {
 		return mazes;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((solutions == null) ? 0 : solutions.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MyModel other = (MyModel) obj;
+		if (solutions == null) {
+			if (other.solutions != null)
+				return false;
+		} else if (!solutions.equals(other.solutions))
+			return false;
+		return true;
+	}
+
 
 }
