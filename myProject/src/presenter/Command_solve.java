@@ -11,12 +11,14 @@
 package presenter;
 
 import model.Model;
+import view.View;
 
 /**
  * The Class Command_solve.
  */
 public class Command_solve implements Command {
 	
+	private View view;
 	/** The model. */
 	private Model model;
 	
@@ -25,7 +27,8 @@ public class Command_solve implements Command {
 	 *
 	 * @param model the model
 	 */
-	public Command_solve(Model model){
+	public Command_solve(View view,Model model){
+		this.view=view;
 		this.model=model;
 	}
 	
@@ -37,11 +40,20 @@ public class Command_solve implements Command {
 		//check for errors first
 		String[] strings=string.split(" ");
 		if(strings.length!=2)
-			System.out.println("Bad parameters, try again");
+			view.printMessage("Bad parameters, try again");
 		else{
 			String name=strings[0];
 			if(!model.mazeNameCheck(name))
-				System.out.println("Maze does not exist, try again");
+				view.printMessage("Maze does not exist, try again");
+			else if(model.solutionExists(model.getMazes().get(name))){
+				view.printMessage("Solution for "+name+" already exists");
+//				Command display_solution=(view.getMap().get("display_solution"));
+//				try {
+//					display_solution.doCommand(name);
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+			}
 			else{
 			String algorithm=strings[1];
 			model.solveMaze(name,algorithm);

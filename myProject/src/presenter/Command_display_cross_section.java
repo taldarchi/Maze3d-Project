@@ -43,11 +43,11 @@ public class Command_display_cross_section implements Command {
 		//get information from string before telling view
 		String[] strings=string.split(" ");
 		if(strings.length!=3)
-			System.out.println("Bad parameters, try again");
+			view.printMessage("Bad parameters, try again");
 		else{
 			String name=strings[0];
 			if(!model.mazeNameCheck(name))
-				System.out.println("Maze does not exist, try again");
+				view.printMessage("Maze does not exist, try again");
 			else{
 				Maze3d maze=model.getMazeByName(name);
 				String axis=strings[1];
@@ -71,7 +71,7 @@ public class Command_display_cross_section implements Command {
 					break;
 				}
 				}catch(NumberFormatException e){
-					System.out.println("First type axis and then index!");
+					view.printMessage("First type axis and then index!");
 				}
 
 			}

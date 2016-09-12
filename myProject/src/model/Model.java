@@ -11,6 +11,7 @@ package model;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
@@ -19,7 +20,7 @@ import algorithms.search.Solution;
 /**
  * The Interface Model.
  */
-public interface Model {
+public interface Model{
 	
 	/**
 	 * Load maze.
@@ -39,8 +40,10 @@ public interface Model {
 	 * @param x the x
 	 * @param y the y
 	 * @param algorithm the algorithm
+	 * @throws ExecutionException 
+	 * @throws InterruptedException 
 	 */
-	public void generate3dMaze(String name, int z, int x, int y, String algorithm);
+	public void generate3dMaze(String name, int z, int x, int y, String algorithm) throws InterruptedException, ExecutionException;
 	
 	/**
 	 * Solve maze.
@@ -72,7 +75,7 @@ public interface Model {
 	 *
 	 * @return the solutions
 	 */
-	public HashMap<String, Solution<Position>> getSolutions();
+	public HashMap<Maze3d, Solution<Position>> getSolutions();
 	
 	/**
 	 * Gets the maze by name.
@@ -81,5 +84,12 @@ public interface Model {
 	 * @return the maze by name
 	 */
 	public Maze3d getMazeByName(String name);
+
+	boolean solutionExists(Maze3d maze);
+	
+	public void saveSolutionMap(String fileName);
+	public void loadSolutionMap(String fileName);
+
+	HashMap<String, Maze3d> getMazes();
 
 }

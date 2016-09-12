@@ -13,12 +13,14 @@ package presenter;
 import java.io.IOException;
 
 import model.Model;
+import view.View;
 
 /**
  * The Class Command_save_maze.
  */
 public class Command_save_maze implements Command {
 	
+	private View view;
 	/** The model. */
 	private Model model;
 	
@@ -27,7 +29,8 @@ public class Command_save_maze implements Command {
 	 *
 	 * @param model the model
 	 */
-	public Command_save_maze(Model model){
+	public Command_save_maze(View view,Model model){
+		this.view=view;
 		this.model=model;
 	}
 	
@@ -39,7 +42,7 @@ public class Command_save_maze implements Command {
 		//check for errors first
 		String[] strings=string.split(" ");
 		if(strings.length!=2)
-			System.out.println("Bad parameters, try again");
+			view.printMessage("Bad parameters, try again");
 		else{
 			String name=strings[0];
 			String fileName=strings[1];

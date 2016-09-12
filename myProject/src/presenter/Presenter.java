@@ -21,13 +21,15 @@ public class Presenter implements Observer{
 	      this.model=model;
 	      HashMap<String,Command> map=new HashMap<String,Command>();
 		  map.put("dir", new Command_dir(view));
-		  map.put("generate_3d_maze", new Command_generate_3d_maze(model));
+		  map.put("generate_3d_maze", new Command_generate_3d_maze(view, model));
 		  map.put("display", new Command_display(view, model));
 		  map.put("display_cross_section", new Command_display_cross_section(view, model));
-		  map.put("save_maze", new Command_save_maze(model));
-		  map.put("load_maze", new Command_load_maze(model));
-		  map.put("solve", new Command_solve(model));
+		  map.put("save_maze", new Command_save_maze(view, model));
+		  map.put("load_maze", new Command_load_maze(view, model));
+		  map.put("solve", new Command_solve(view, model));
 		  map.put("display_solution", new Command_display_solution(view, model));
+		  map.put("save_solution_map", new Command_save_solution_map(view, model));
+		  map.put("load_solution_map", new Command_load_solution_map(view, model));
 		  map.put("exit",new Command_exit(view));
 		  view.setMap(map);
 	}
@@ -101,6 +103,20 @@ public class Presenter implements Observer{
 						while(s.hasNext())
 							string+=s.next();
 						display_solution.doCommand(string);
+						s.close();
+						break;
+					case "save_solution_map":
+						Command save_solution_map=((View) view).getMap().get("save_solution_map");
+						while(s.hasNext())
+							string+=s.next();
+						save_solution_map.doCommand(string);
+						s.close();
+						break;
+					case "load_solution_map":
+						Command load_solution_map=((View) view).getMap().get("load_solution_map");
+						while(s.hasNext())
+							string+=s.next();
+						load_solution_map.doCommand(string);
 						s.close();
 						break;
 					case "exit":

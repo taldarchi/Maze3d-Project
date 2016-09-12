@@ -10,6 +10,7 @@
 package presenter;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 /**
  * The Interface Command.
@@ -21,6 +22,8 @@ public interface Command {
 	 *
 	 * @param string the string
 	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws ExecutionException 
+	 * @throws InterruptedException 
 	 */
 	public void doCommand(String string) throws IOException;
 }

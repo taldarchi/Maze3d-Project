@@ -27,13 +27,15 @@ public class Command_display_solution implements Command {
 		//check for errors first
 		String[] strings=string.split(" ");
 		if(strings.length!=1)
-			System.out.println("Bad parameters, try again");
+			view.printMessage("Bad parameters, try again");
 		else{
 			String name=strings[0];
 			if(!model.mazeNameCheck(name))
-				System.out.println("Maze does not exist, try again");
+				view.printMessage("Maze does not exist, try again");
+			else if(!model.solutionExists(model.getMazes().get(name)))
+				view.printMessage("Solution does not exist yet for "+name);
 			else{
-				Solution<Position> solution=model.getSolutions().get(string);
+				Solution<Position> solution=model.getSolutions().get(model.getMazes().get(name));
 				view.displaySolution(solution);
 			}
 	}

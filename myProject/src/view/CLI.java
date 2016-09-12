@@ -37,18 +37,18 @@ public class CLI{
 	 */
 	public void start() throws IOException{
 
-	new Thread(new Runnable(){
-		@Override
-		public void run() {
+	//new Thread(new Runnable(){
+	//	@Override
+	//	public void run() {
 			printMenu();
 			while(true){
 				String command=getLineFromView();
 				view.executeCommand(command);
 			}
 		}
-	}).start();	
+	//}).start();	
 	
-	}
+	//}
 	
 	/**
 	 * Prints the menu.
@@ -63,6 +63,8 @@ public class CLI{
 	    		+ "load_maze <file name> <name> - Load maze\n"
 	    		+ "solve <name> <algorithm> - Solve desired maze with desired algorithm\n"
 	    		+ "display_solution <name> - Display solution\n"
+	    		+ "save_solution_map <file name> - Save existing solution map to a file called <file name>\n"
+	    		+ "load_solution_map <file name> - Load solution map from a file called <file_name>\n"
 	    		+ "exit - Close and exit everything\n");
 	}
 	

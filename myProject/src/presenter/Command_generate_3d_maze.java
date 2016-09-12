@@ -10,13 +10,17 @@
  */
 package presenter;
 
+import java.util.concurrent.ExecutionException;
+
 import model.Model;
+import view.View;
 
 /**
  * The Class Command_generate_3d_maze.
  */
 public class Command_generate_3d_maze implements Command {
 	
+	private View view;
 	/** The model. */
 	private Model model;
 	
@@ -25,7 +29,8 @@ public class Command_generate_3d_maze implements Command {
 	 *
 	 * @param model the model
 	 */
-	public Command_generate_3d_maze(Model model){
+	public Command_generate_3d_maze(View view,Model model){
+		this.view=view;
 		this.model=model;
 	}
 
@@ -33,24 +38,30 @@ public class Command_generate_3d_maze implements Command {
 	 * @see controller.Command#doCommand(java.lang.String)
 	 */
 	@Override
-	public void doCommand(String string) {
+	public void doCommand(String string){
 		//check for errors first
 		String[] strings=string.split(" |,");
 		if(strings.length!=5)
-			System.out.println("Bad parameters, try again");
+			view.printMessage("Bad parameters, try again");
 		else{
 			String name=strings[0];
 			if(model.mazeNameCheck(name))
-				System.out.println("Maze name already exists, try again");
+				view.printMessage("Maze name already exists, try again");
 			else{
 				String algorithm=strings[4];
 				if(!algorithm.equalsIgnoreCase("simple") && !algorithm.equalsIgnoreCase("growing_tree_last") && !algorithm.equalsIgnoreCase("growing_tree_random"))
-					System.out.println("Wrong algorithm, try again");
+					view.printMessage("Wrong algorithm, try again");
 				else{
 					int z=Integer.parseInt(strings[1]);
 					int x=Integer.parseInt(strings[2]);
 					int y=Integer.parseInt(strings[3]);
-					model.generate3dMaze(name,z,x,y,algorithm);
+					try {
+						model.generate3dMaze(name,z,x,y,algorithm);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					} catch (ExecutionException e) {
+						e.printStackTrace();
+					}
 					
 				}
 			}

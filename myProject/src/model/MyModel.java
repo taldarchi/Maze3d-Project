@@ -9,24 +9,26 @@
  */
 package model;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Observable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
-import algorithms.demo.MazeAdapter;
-import algorithms.mazeGenerators.GetLastCell;
-import algorithms.mazeGenerators.GetRandomCell;
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
-import algorithms.mazeGenerators.SimpleMaze3dGenerator;
-import algorithms.search.BFS;
-import algorithms.search.CommonSearcher;
-import algorithms.search.DFS;
 import algorithms.search.Solution;
 import io.MyCompressorOutputStream;
 import io.MyDecompressorInputStream;
@@ -34,13 +36,17 @@ import io.MyDecompressorInputStream;
 /**
  * The Class MyModel.
  */
-public class MyModel extends Observable implements Model {
+public class MyModel extends Observable implements Model{
 	
+	/**
+	 * 
+	 */
+	ExecutorService executor = Executors.newCachedThreadPool();
 	/** The mazes. */
 	private HashMap<String,Maze3d> mazes=new HashMap<String,Maze3d>();
 	
 	/** The solutions. */
-	private HashMap<String,Solution<Position>> solutions=new HashMap<String,Solution<Position>>();
+	private HashMap<Maze3d, Solution<Position>> solutions=new HashMap<Maze3d,Solution<Position>>();
 
 	/* (non-Javadoc)
 	 * @see model.Model#generate3dMaze(java.lang.String, int, int, int, java.lang.String)
@@ -48,31 +54,19 @@ public class MyModel extends Observable implements Model {
 	 * generation of the 3d maze from the parameters 
 	 */
 	@Override
-	public void generate3dMaze(String name,int z,int x, int y, String algorithm) {
-		new Thread(new Runnable(){
-			@Override
-			public void run() {
-				switch(algorithm){
-				case "simple":
-					Maze3d simpleMaze=new SimpleMaze3dGenerator().generate(z,x,y);
-					mazes.put(name, simpleMaze);
-					break;
-				case "growing_tree_last":
-					Maze3d GTLCmaze=new GetLastCell().generate(z,x,y);
-					mazes.put(name, GTLCmaze);
-					break;
-				case"growing_tree_random":
-					Maze3d GTRmaze=new GetRandomCell().generate(z,x,y);
-					mazes.put(name, GTRmaze);
-					break;
-		}
-			String mazeName=name;
-			String message = String.format("Maze %s is ready", mazeName);
-			setChanged();
-			notifyObservers(message);
-	}
-  }).start();
+	public void generate3dMaze(String name,int z,int x, int y, String algorithm){
 		
+		Future<Maze3d> m=executor.submit(new GenerateMazeCallable(name,z,x,y,algorithm));
+		try {
+			Maze3d maze = m.get();
+			mazes.put(name,maze);
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
+		String mazeName=name;
+		String message = String.format("Maze %s is ready", mazeName);
+		setChanged();
+		notifyObservers(message);
 	}
 
 	/* (non-Javadoc)
@@ -120,40 +114,25 @@ public class MyModel extends Observable implements Model {
 	 */
 	@Override
 	public void solveMaze(String mazeName, String algorithm) {
-		new Thread(new Runnable(){
-			@Override
-				public void run() {
-					Maze3d maze=mazes.get(mazeName);
-					MazeAdapter m=new MazeAdapter(maze);
-					CommonSearcher<Position> searcher;
-					//List<State<Position>> solution = null;
-					Solution<Position> solution;
-					if(!algorithm.equals("bfs")&&!algorithm.equals("BFS")&&!algorithm.equals("dfs")&&!algorithm.equals("DFS")){
-						String message="Cant find search algorithm, try again";
-						setChanged();
-						notifyObservers(message);
-					}
-					else{
-						switch(algorithm){
-						case "bfs":
-						case "BFS":
-							searcher=new BFS<Position>();
-							solution=searcher.search(m);
-							solutions.put(mazeName, solution);
-							break;
-						case "dfs":
-						case "DFS":
-							searcher=new DFS<Position>();
-							solution=searcher.search(m);
-							solutions.put(mazeName, solution);
-							break;
-						}
-						String message = String.format("Solution for %s (%s) is ready", mazeName,algorithm);
-						setChanged();
-						notifyObservers(message);
-					}
+		Maze3d maze=mazes.get(mazeName);
+		if(!algorithm.equals("bfs")&&!algorithm.equals("BFS")&&!algorithm.equals("dfs")&&!algorithm.equals("DFS")){
+			String message="Search algorithm does not exist, try again";
+			setChanged();
+			notifyObservers(message);
+		}
+		else{
+			Future<Solution<Position>> s=executor.submit(new SolveMazeCallable(maze, algorithm));
+			Solution<Position> solution;
+			try {
+				solution = s.get();
+				solutions.put(maze, solution);
+			} catch (InterruptedException | ExecutionException e) {
+				e.printStackTrace();
 			}
- 		}).start();
+			String message = String.format("Solution for %s (%s) is ready", mazeName,algorithm);
+			setChanged();
+			notifyObservers(message);
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -192,8 +171,51 @@ public class MyModel extends Observable implements Model {
 	 * 
 	 * returns the solutions
 	 */
-	public HashMap<String, Solution<Position>> getSolutions() {
+	@Override
+	public HashMap<Maze3d, Solution<Position>> getSolutions() {
 		return solutions;
+	}
+	@Override
+	public boolean solutionExists(Maze3d maze){
+		return solutions.containsKey(maze);
+	}
+
+	@Override
+	public void saveSolutionMap(String fileName){
+		try {
+	        File file = new File(fileName);
+	        ObjectOutputStream output;
+			output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
+	        output.writeObject(solutions);
+	        output.flush();
+	        output.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void loadSolutionMap(String fileName) {
+		try {
+	        File file = new File(fileName);
+	        ObjectInputStream input;
+			input = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)));
+	        Object readObject = input.readObject();
+	        input.close();
+	        if(!(readObject instanceof HashMap)) throw new IOException("Data is not a hashmap");
+	        solutions = (HashMap<Maze3d, Solution<Position>>) readObject;
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		
+	}
+	@Override
+	public HashMap<String, Maze3d> getMazes() {
+		return mazes;
 	}
 
 }

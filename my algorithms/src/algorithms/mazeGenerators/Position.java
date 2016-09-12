@@ -1,13 +1,20 @@
 package algorithms.mazeGenerators;
 
+import java.io.Serializable;
+
 import algorithms.demo.Modifiable;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class Position.
  */
-public class Position implements Modifiable<Position>{
+public class Position implements Modifiable<Position>,Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -190684465713187970L;
+
 	/** The z. */
 	private int z;
 	

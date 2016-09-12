@@ -1,5 +1,7 @@
 package algorithms.search;
 
+import java.io.Serializable;
+
 import algorithms.demo.Modifiable;
 
 // TODO: Auto-generated Javadoc
@@ -9,9 +11,14 @@ import algorithms.demo.Modifiable;
  * Inside, we can use whatever types that can describe states generally
  * @param <T> the generic type
  */
-public class State<T> implements Modifiable<State<T>>{
+public class State<T> implements Modifiable<State<T>>,Serializable{
     
-    /** The state. */
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -488340128770820272L;
+
+	/** The state. */
     private T state;    // the state represented by a string
     
     /** The cost. */

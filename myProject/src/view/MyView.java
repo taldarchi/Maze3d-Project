@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.NoSuchElementException;
 import java.util.Observable;
 import java.util.Scanner;
 
@@ -155,6 +156,7 @@ public class MyView extends Observable implements View {
 	 */
 	public void executeCommand(String string){
 		Scanner s = new Scanner(string);
+		try{
 		String command=s.next();
 		if(map.containsKey(command)){
 			setChanged();
@@ -164,6 +166,9 @@ public class MyView extends Observable implements View {
 		else
 			printMessage("No such command");
 		s.close();
+		}catch(NoSuchElementException e){
+			out.println("No such command");
+		}
 	}
 		
 	/* (non-Javadoc)
