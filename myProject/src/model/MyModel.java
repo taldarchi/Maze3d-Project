@@ -20,6 +20,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Observable;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -27,11 +28,20 @@ import java.util.concurrent.Future;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import algorithms.demo.MazeAdapter;
+import algorithms.mazeGenerators.GetLastCell;
+import algorithms.mazeGenerators.GetRandomCell;
 import algorithms.mazeGenerators.Maze3d;
+import algorithms.mazeGenerators.Maze3dGenerator;
 import algorithms.mazeGenerators.Position;
+import algorithms.mazeGenerators.SimpleMaze3dGenerator;
+import algorithms.search.BFS;
+import algorithms.search.CommonSearcher;
+import algorithms.search.DFS;
 import algorithms.search.Solution;
 import io.MyCompressorOutputStream;
 import io.MyDecompressorInputStream;
+import utils.PropertiesFile;
 
 /**
  * The Class MyModel.
@@ -41,7 +51,7 @@ public class MyModel extends Observable implements Model{
 	/**
 	 *
 	 */
-	ExecutorService executor = Executors.newCachedThreadPool();
+	private ExecutorService executor = Executors.newFixedThreadPool(PropertiesFile.getProperties().getThreadsNum());
 	/** The mazes. */
 	private HashMap<String,Maze3d> mazes=new HashMap<String,Maze3d>();
 	
@@ -54,9 +64,16 @@ public class MyModel extends Observable implements Model{
 	 * generation of the 3d maze from the parameters 
 	 */
 	@Override
-	public void generate3dMaze(String name,int z,int x, int y, String algorithm){
+	public void generate3dMaze(String name,int z,int x, int y){
 		
-		Future<Maze3d> m=executor.submit(new GenerateMazeCallable(name,z,x,y,algorithm));
+		Future<Maze3d> m=executor.submit(new Callable<Maze3d>(){
+			
+			@Override
+			public Maze3d call() throws Exception {
+					Maze3d maze=generateFromProperties().generate(z, x, y);
+					return maze;
+				}
+		});
 		try {
 			Maze3d maze = m.get();
 			mazes.put(name,maze);
@@ -113,26 +130,29 @@ public class MyModel extends Observable implements Model{
 	 * solve maze with desired algorithm
 	 */
 	@Override
-	public void solveMaze(String mazeName, String algorithm) {
+	public void solveMaze(String mazeName) {
 		Maze3d maze=mazes.get(mazeName);
-		if(!algorithm.equals("bfs")&&!algorithm.equals("BFS")&&!algorithm.equals("dfs")&&!algorithm.equals("DFS")){
-			String message="Search algorithm does not exist, try again";
-			setChanged();
-			notifyObservers(message);
-		}
-		else{
-			Future<Solution<Position>> s=executor.submit(new SolveMazeCallable(maze, algorithm));
-			Solution<Position> solution;
-			try {
-				solution = s.get();
-				solutions.put(maze, solution);
-			} catch (InterruptedException | ExecutionException e) {
-				e.printStackTrace();
+		Future<Solution<Position>> s=executor.submit(new Callable<Solution<Position>>(){
+
+			@Override
+			public Solution<Position> call() throws Exception {
+				MazeAdapter m=new MazeAdapter(maze);
+				CommonSearcher<Position> searcher;
+				Solution<Position> solution;
+				searcher=new BFS<Position>();
+				solution=searcher.search(m);
+				return solution;
 			}
-			String message = String.format("Solution for %s (%s) is ready", mazeName,algorithm);
-			setChanged();
-			notifyObservers(message);
+		});
+		try {
+			Solution<Position> solution = s.get();
+			solutions.put(maze, solution);
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
 		}
+ 	    String message = String.format("Solution for %s is ready", mazeName);
+		setChanged();
+		notifyObservers(message);
 	}
 	
 	/* (non-Javadoc)
@@ -244,6 +264,26 @@ public class MyModel extends Observable implements Model{
 			return false;
 		return true;
 	}
-
-
+	public Maze3dGenerator generateFromProperties(){
+		switch(PropertiesFile.getProperties().getGeneratorAlgorithm()){
+		case "simple":
+			return new SimpleMaze3dGenerator();
+		case "growing_tree_last":
+			return new GetLastCell();
+		case"growing_tree_random":
+			return new GetRandomCell();
+	}
+		return null;
+}
+	public CommonSearcher<Position> solveFromProperties(){
+		switch(PropertiesFile.getProperties().getSearchAlgorithm()){
+		case "bfs":
+		case "BFS":
+			return new BFS<Position>();
+		case "dfs":
+		case "DFS":
+			return new DFS<Position>();
+		}
+		return null;
+	}
 }

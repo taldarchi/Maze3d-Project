@@ -43,7 +43,7 @@ public interface Model{
 	 * @throws ExecutionException 
 	 * @throws InterruptedException 
 	 */
-	public void generate3dMaze(String name, int z, int x, int y, String algorithm) throws InterruptedException, ExecutionException;
+	public void generate3dMaze(String name, int z, int x, int y) throws InterruptedException, ExecutionException;
 	
 	/**
 	 * Solve maze.
@@ -51,7 +51,7 @@ public interface Model{
 	 * @param mazeName the maze name
 	 * @param algorithm the algorithm
 	 */
-	public void solveMaze(String mazeName, String algorithm);
+	public void solveMaze(String mazeName);
 	
 	/**
 	 * Maze name check.
@@ -91,5 +91,7 @@ public interface Model{
 	public void loadSolutionMap(String fileName);
 
 	HashMap<String, Maze3d> getMazes();
+
+
 
 }

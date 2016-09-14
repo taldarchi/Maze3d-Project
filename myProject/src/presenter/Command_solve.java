@@ -39,18 +39,18 @@ public class Command_solve implements Command {
 	public void doCommand(String string) {
 		//check for errors first
 		String[] strings=string.split(" ");
-		if(strings.length!=2)
+		if(strings.length!=1)
 			view.printMessage("Bad parameters, try again");
 		else{
 			String name=strings[0];
 			if(!model.mazeNameCheck(name))
 				view.printMessage("Maze does not exist, try again");
 			else if(model.solutionExists(model.getMazes().get(name))){
-				view.printMessage("Solution for "+name+" already exists");
+				view.printMessage("Solution for "+name+" already exists:");
+				view.displaySolution(model.getSolutions().get(model.getMazes().get(name)));
 			}
 			else{
-			String algorithm=strings[1];
-			model.solveMaze(name,algorithm);
+			model.solveMaze(name);
 			}
 
 	}

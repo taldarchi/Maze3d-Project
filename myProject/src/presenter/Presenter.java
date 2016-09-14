@@ -50,13 +50,13 @@ public class Presenter implements Observer{
 				}
 				else
 					string+=" "+s.next();
+			}
 			try {
 				command.doCommand(string);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			s.close();
-			}
 		}
 		if(o==model){
 			String str=(String)arg;

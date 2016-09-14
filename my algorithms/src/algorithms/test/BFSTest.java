@@ -10,6 +10,6 @@ public class BFSTest {
 
     @Test
     public void shouldReturnNewPointAndXcordinatetLesserOnOnePointWhenLeftMove() {
-        assertEquals(new Point(0, 2), left(testPoint));
+        assertTrue(new Point(0, 2), left(testPoint));
 
 }
