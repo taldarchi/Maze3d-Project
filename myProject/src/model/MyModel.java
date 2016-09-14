@@ -52,11 +52,13 @@ public class MyModel extends Observable implements Model{
 	 *
 	 */
 	private ExecutorService executor = Executors.newFixedThreadPool(PropertiesFile.getProperties().getThreadsNum());
+	
 	/** The mazes. */
 	private HashMap<String,Maze3d> mazes=new HashMap<String,Maze3d>();
 	
 	/** The solutions. */
 	private HashMap<Maze3d, Solution<Position>> solutions=new HashMap<Maze3d,Solution<Position>>();
+	private PlayedMaze maze;
 
 	/* (non-Javadoc)
 	 * @see model.Model#generate3dMaze(java.lang.String, int, int, int, java.lang.String)
@@ -286,4 +288,39 @@ public class MyModel extends Observable implements Model{
 		}
 		return null;
 	}
+	
+	public void setMazeToPlay(String name){
+		this.maze.setMaze(getMazeByName(name));
+		this.maze.setSolution(getSolutions().get(getMazeByName(name)));
+		this.maze.setCurrentPosition(getMazeByName(name).getStartPosition());
+		
+	}
+	
+	public void up(String string){
+		this.maze.setCurrentPosition(new Position(this.maze.getCurrentPosition().getZ()+1,this.maze.getCurrentPosition().getX(),this.maze.getCurrentPosition().getY()));
+	}
+	
+	public void down(String string){
+		this.maze.setCurrentPosition(new Position(this.maze.getCurrentPosition().getZ()-1,this.maze.getCurrentPosition().getX(),this.maze.getCurrentPosition().getY()));
+	
+	}	
+	
+	public void forward(String string){
+		this.maze.setCurrentPosition(new Position(this.maze.getCurrentPosition().getZ(),this.maze.getCurrentPosition().getX()+1,this.maze.getCurrentPosition().getY()));
+		
+	}	
+	
+	public void backwards(String string){
+		this.maze.setCurrentPosition(new Position(this.maze.getCurrentPosition().getZ(),this.maze.getCurrentPosition().getX()-1,this.maze.getCurrentPosition().getY()));
+		
+	}	
+	
+	public void right(String string){
+		this.maze.setCurrentPosition(new Position(this.maze.getCurrentPosition().getZ(),this.maze.getCurrentPosition().getX(),this.maze.getCurrentPosition().getY()+1));
+	}
+	
+	public void left(String string){
+		this.maze.setCurrentPosition(new Position(this.maze.getCurrentPosition().getZ(),this.maze.getCurrentPosition().getX(),this.maze.getCurrentPosition().getY()-1));
+	}
+		
 }

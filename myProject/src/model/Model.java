@@ -90,7 +90,14 @@ public interface Model{
 	public void saveSolutionMap(String fileName);
 	public void loadSolutionMap(String fileName);
 
-	HashMap<String, Maze3d> getMazes();
+	public HashMap<String, Maze3d> getMazes();
+
+	public void forward(String string);
+	public void backwards(String string);
+	public void up(String string);
+	public void down(String string);
+	public void left(String string);
+	public void right(String string);
 
 
 
