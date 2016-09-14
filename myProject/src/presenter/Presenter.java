@@ -56,11 +56,11 @@ public class Presenter implements Observer{
 				e.printStackTrace();
 			}
 			s.close();
+			}
 		}
 		if(o==model){
 			String str=(String)arg;
 			((View) view).printMessage(str);
-		}
 		}
 	}
 }
