@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.8.0_74" class="java.beans.XMLDecoder">
+ <object class="presenter.Properties">
+  <void property="generatorAlgorithm">
+   <string>growing_tree_last</string>
+  </void>
+  <void property="searchAlgorithm">
+   <string>bfs</string>
+  </void>
+  <void property="threadsNum">
+   <int>5</int>
+  </void>
+ </object>
+</java>

@@ -125,8 +125,7 @@ public class MyView extends Observable implements View {
 	 * @see view.View#exit()
 	 */
 	@Override
-	public void exit() throws IOException 
-	{
+	public void exit() throws IOException {
 		out.println("Quiting everything...");
 		out.println("Done.");
 		in.close();

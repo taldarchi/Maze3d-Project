@@ -37,102 +37,30 @@ public class Presenter implements Observer{
 	@Override
 	public void update(Observable o, Object arg) {
 		if(o==view){
-			try {
+			Command command;
+			boolean bool=true;
 			String line=new String((String)arg);
 			Scanner s = new Scanner(line);
 			String string = new String();
-			String command=s.next();
-			switch (command){
-			case "dir":
-				Command dir=((View) view).getMap().get("dir");
-				boolean bool=true;
-				while(s.hasNext()){
-					if(bool){
-						string+=s.next();
-						bool=false;
-					}
-					else
-						string+=" "+s.next();
+			command=((View) view).getMap().get(s.next());
+			while(s.hasNext()){
+				if(bool){
+					string+=s.next();
+					bool=false;
 				}
-					dir.doCommand(string);
-						s.close();
-						break;
-					case "generate_3d_maze":
-						Command generate=((View) view).getMap().get("generate_3d_maze");
-						while(s.hasNext())
-							string+=s.next()+ " ";
-						generate.doCommand(string);
-						break;
-					case "display":
-						Command display=((View) view).getMap().get("display");
-						while(s.hasNext())
-							string+=s.next();
-						display.doCommand(string);
-						s.close();
-						break;
-					case "display_cross_section":
-						Command display_cross_section=((View) view).getMap().get("display_cross_section");
-						while(s.hasNext())
-							string+=s.next()+ " ";
-						display_cross_section.doCommand(string);
-						s.close();
-						break;
-					case "save_maze":
-						Command save_maze=((View) view).getMap().get("save_maze");
-						while(s.hasNext())
-							string+=s.next()+ " ";
-						save_maze.doCommand(string);
-						s.close();
-						break;
-					case "load_maze":
-						Command load_maze=((View) view).getMap().get("load_maze");
-						while(s.hasNext())
-							string+=s.next()+ " ";
-						load_maze.doCommand(string);
-						s.close();
-						break;
-					case "solve":
-						Command solve=((View) view).getMap().get("solve");
-						while(s.hasNext())
-							string+=s.next()+ " ";
-						solve.doCommand(string);
-						s.close();
-						break;
-					case "display_solution":
-						Command display_solution=((View) view).getMap().get("display_solution");
-						while(s.hasNext())
-							string+=s.next();
-						display_solution.doCommand(string);
-						s.close();
-						break;
-					case "save_solution_map":
-						Command save_solution_map=((View) view).getMap().get("save_solution_map");
-						while(s.hasNext())
-							string+=s.next();
-						save_solution_map.doCommand(string);
-						s.close();
-						break;
-					case "load_solution_map":
-						Command load_solution_map=((View) view).getMap().get("load_solution_map");
-						while(s.hasNext())
-							string+=s.next();
-						load_solution_map.doCommand(string);
-						s.close();
-						break;
-					case "exit":
-						Command exit=((View) view).getMap().get("exit");
-						exit.doCommand(null);
-				}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				else
+					string+=" "+s.next();
+			try {
+				command.doCommand(string);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			s.close();
 		}
 		if(o==model){
-			String s=(String)arg;
-			((View) view).printMessage(s);
+			String str=(String)arg;
+			((View) view).printMessage(str);
 		}
-			
-		
+		}
 	}
 }

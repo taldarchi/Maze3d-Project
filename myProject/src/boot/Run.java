@@ -9,7 +9,9 @@
  */
 package boot;
 
+import java.beans.XMLDecoder;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -17,6 +19,7 @@ import java.util.concurrent.ExecutionException;
 
 import model.MyModel;
 import presenter.Presenter;
+import presenter.Properties;
 import view.MyView;
 
 /**
@@ -38,6 +41,11 @@ public class Run {
 		Presenter p=new Presenter(view,model);
 		view.addObserver(p);
 		model.addObserver(p);
+		XMLDecoder decoder;
+		decoder = new XMLDecoder(new FileInputStream("properties.xml"));
+		Properties properties=(Properties) decoder.readObject();
+		decoder.close();
+	    System.out.println(properties.getGeneratorAlgorithm());
 		view.start();
 
 
