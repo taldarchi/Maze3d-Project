@@ -32,6 +32,8 @@ public class MyView extends Observable implements View {
 	/** The cli. */
 	private CLI cli;
 	
+	private GUI gui;
+	
 	/** The in. */
 	private BufferedReader in;
 	
@@ -66,7 +68,9 @@ public class MyView extends Observable implements View {
 	 */
 	public void start() throws IOException{
 		this.cli=new CLI(this);
-		cli.start();
+		this.gui=new GUI(this);
+		//cli.start();
+		gui.start();
 	}
 
 	/* (non-Javadoc)

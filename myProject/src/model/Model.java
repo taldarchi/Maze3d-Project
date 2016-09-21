@@ -43,15 +43,16 @@ public interface Model{
 	 * @throws ExecutionException 
 	 * @throws InterruptedException 
 	 */
-	public void generate3dMaze(String name, int z, int x, int y) throws InterruptedException, ExecutionException;
+	public void generate3dMaze(String name, int z, int x, int y,String algorithm) throws InterruptedException, ExecutionException;
 	
 	/**
 	 * Solve maze.
 	 *
 	 * @param mazeName the maze name
+	 * @param algorithm 
 	 * @param algorithm the algorithm
 	 */
-	public void solveMaze(String mazeName);
+	public void solveMaze(String mazeName, String algorithm);
 	
 	/**
 	 * Maze name check.
@@ -98,6 +99,7 @@ public interface Model{
 	public void down(String string);
 	public void left(String string);
 	public void right(String string);
+
 
 
 

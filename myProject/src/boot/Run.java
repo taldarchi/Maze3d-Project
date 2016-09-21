@@ -18,6 +18,7 @@ import java.util.concurrent.ExecutionException;
 import model.MyModel;
 import presenter.Presenter;
 import utils.PropertiesFile;
+import view.GUI;
 import view.MyView;
 
 /**
@@ -42,6 +43,9 @@ public class Run {
 		view.addObserver(p);
 		model.addObserver(p);
 		view.start();
+		
+//		GUI win = new GUI();
+//		win.start();
 
 
 	}

@@ -39,7 +39,7 @@ public class Command_solve implements Command {
 	public void doCommand(String string) {
 		//check for errors first
 		String[] strings=string.split(" ");
-		if(strings.length!=1)
+		if(strings.length!=1 &&strings.length!=2)
 			view.printMessage("Bad parameters, try again");
 		else{
 			String name=strings[0];
@@ -50,7 +50,10 @@ public class Command_solve implements Command {
 				view.displaySolution(model.getSolutions().get(model.getMazes().get(name)));
 			}
 			else{
-			model.solveMaze(name);
+				String algorithm=null;
+				if(strings.length==2)
+					algorithm=strings[1];
+				model.solveMaze(name,algorithm);
 			}
 
 	}

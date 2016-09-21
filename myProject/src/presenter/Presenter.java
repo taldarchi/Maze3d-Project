@@ -13,7 +13,7 @@ import view.View;
 
 public class Presenter implements Observer{
 	
-	private Observable view;
+	private View view;
 	private Model model;
 	
 	public Presenter(MyView view, MyModel model){

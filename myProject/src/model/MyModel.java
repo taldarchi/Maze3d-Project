@@ -66,15 +66,30 @@ public class MyModel extends Observable implements Model{
 	 * generation of the 3d maze from the parameters 
 	 */
 	@Override
-	public void generate3dMaze(String name,int z,int x, int y){
+	public void generate3dMaze(String name,int z,int x, int y,String algorithm){
 		
 		Future<Maze3d> m=executor.submit(new Callable<Maze3d>(){
 			
 			@Override
 			public Maze3d call() throws Exception {
-					Maze3d maze=generateFromProperties().generate(z, x, y);
-					return maze;
+				Maze3d maze = new Maze3d();
+				if(algorithm==null)
+					maze=generateFromProperties().generate(z, x, y);
+				else{
+					switch(algorithm){
+						case "simple":
+							maze= new SimpleMaze3dGenerator().generate(z, x, y);
+							return maze;
+						case "growing_tree_last":
+							maze= new GetLastCell().generate(z, x, y);
+							return maze;
+						case"growing_tree_random":
+							maze= new GetRandomCell().generate(z, x, y);
+							return maze;
+					}
 				}
+				return maze;
+			}
 		});
 		try {
 			Maze3d maze = m.get();
@@ -97,7 +112,13 @@ public class MyModel extends Observable implements Model{
 	public void saveMaze(String name, String fileName) throws IOException {
 		Maze3d maze=mazes.get(name);
 		OutputStream out=new MyCompressorOutputStream(new FileOutputStream(fileName));
+		try{
 		out.write(maze.toByteArray());
+		}catch(NullPointerException e){
+			String message = ("Maze not found, try again");
+			setChanged();
+			notifyObservers(message);
+		}
 		out.flush();
 		out.close();
 		
@@ -132,18 +153,38 @@ public class MyModel extends Observable implements Model{
 	 * solve maze with desired algorithm
 	 */
 	@Override
-	public void solveMaze(String mazeName) {
+	public void solveMaze(String mazeName,String algorithm) {
 		Maze3d maze=mazes.get(mazeName);
 		Future<Solution<Position>> s=executor.submit(new Callable<Solution<Position>>(){
 
 			@Override
 			public Solution<Position> call() throws Exception {
-				MazeAdapter m=new MazeAdapter(maze);
-				CommonSearcher<Position> searcher;
-				Solution<Position> solution;
-				searcher=new BFS<Position>();
-				solution=searcher.search(m);
-				return solution;
+				if(algorithm==null){
+					MazeAdapter m=new MazeAdapter(maze);
+					CommonSearcher<Position> searcher;
+					Solution<Position> solution;
+					searcher=solveFromProperties();
+					solution=searcher.search(m);
+					return solution;
+				}
+				else{
+					MazeAdapter m=new MazeAdapter(maze);
+					CommonSearcher<Position> searcher;
+					Solution<Position> solution;
+					switch(algorithm){
+					case "bfs":
+					case "BFS":
+						searcher=new BFS<Position>();
+						solution=searcher.search(m);
+						return solution;
+					case "dfs":
+					case "DFS":
+						searcher=new DFS<Position>();
+						solution=searcher.search(m);
+						return solution;
+					}
+				}
+				return null;
 			}
 		});
 		try {
