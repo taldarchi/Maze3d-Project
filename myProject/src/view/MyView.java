@@ -10,6 +10,7 @@
 package view;
 
 import java.io.BufferedReader;
+import org.eclipse.swt.SWT;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -23,6 +24,7 @@ import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
 import presenter.Command;
+import utils.PropertiesFile;
 
 /**
  * The Class MyView.
@@ -48,6 +50,7 @@ public class MyView extends Observable implements View {
 	 */
 	public MyView(){
 		this.cli=null;
+		this.gui=null;
 	}
 	
 	/**
@@ -67,10 +70,17 @@ public class MyView extends Observable implements View {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public void start() throws IOException{
-		this.cli=new CLI(this);
-		this.gui=new GUI(this);
-		//cli.start();
-		gui.start();
+		String ui = PropertiesFile.getProperties().getUserInterface();
+		switch(ui){
+		case "cli":
+			this.cli=new CLI(this);
+			cli.start();
+			break;
+		case "gui":
+			this.gui=new GUI(this);
+			gui.start();
+			break;
+		}
 	}
 
 	/* (non-Javadoc)
@@ -86,7 +96,7 @@ public class MyView extends Observable implements View {
 	 */
 	@Override
 	public void displaySolution(Solution<Position> solution) {
-				out.println("Solution Path: "+solution.getSolution());
+		out.println("Solution Path: "+solution.getSolution());
 	}
 
 	/* (non-Javadoc)
@@ -104,7 +114,7 @@ public class MyView extends Observable implements View {
 		        out.println("Directory " + listOfFiles[i].getName());
 		    }
 		}catch(NullPointerException e){
-			out.println("Bad parameters, try again");
+			printMessage("Bad parameters, try again");
 		}
 	}
 	
@@ -112,8 +122,12 @@ public class MyView extends Observable implements View {
 	 * @see view.View#printMessage(java.lang.String)
 	 */
 	@Override
-	public void printMessage(String string) {
-		out.println(string);
+	public void printMessage(String string){
+		if(cli!=null)
+			out.println(string);
+		else
+			gui.message(string);
+		
 	}
 	
 	/* (non-Javadoc)
@@ -130,8 +144,12 @@ public class MyView extends Observable implements View {
 	 */
 	@Override
 	public void exit() throws IOException {
+		
+		String s="save_solution_map";
+		setChanged();
+		notifyObservers(s);
+		
 		out.println("Quiting everything...");
-		out.println("Done.");
 		in.close();
 		out.flush();
 		out.close();

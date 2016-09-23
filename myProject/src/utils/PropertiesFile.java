@@ -19,6 +19,7 @@ public class PropertiesFile {
 			properties.setGeneratorAlgorithm("growing_tree_last");
 			properties.setSearchAlgorithm("bfs");
 			properties.setThreadsNum(5);
+			properties.setUserInterface("gui");
 			encoder.writeObject(properties);
 			encoder.close();
 		} catch (FileNotFoundException e) {

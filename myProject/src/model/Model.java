@@ -88,8 +88,8 @@ public interface Model{
 
 	boolean solutionExists(Maze3d maze);
 	
-	public void saveSolutionMap(String fileName);
-	public void loadSolutionMap(String fileName);
+	public void saveSolutionMap();
+	public void loadSolutionMap();
 
 	public HashMap<String, Maze3d> getMazes();
 
@@ -99,6 +99,7 @@ public interface Model{
 	public void down(String string);
 	public void left(String string);
 	public void right(String string);
+
 
 
 

@@ -55,7 +55,6 @@ public class Command_solve implements Command {
 					algorithm=strings[1];
 				model.solveMaze(name,algorithm);
 			}
-
 	}
 	}
 }

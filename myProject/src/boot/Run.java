@@ -18,7 +18,6 @@ import java.util.concurrent.ExecutionException;
 import model.MyModel;
 import presenter.Presenter;
 import utils.PropertiesFile;
-import view.GUI;
 import view.MyView;
 
 /**
@@ -35,7 +34,7 @@ public class Run {
 	 * @throws InterruptedException 
 	 */
 	public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
-		//PropertiesFileActions.writeProperties();
+		PropertiesFile.writeProperties();
 		PropertiesFile.readProperties();
 	    MyView view=new MyView(new BufferedReader(new InputStreamReader(System.in)), new PrintWriter(System.out, true));
 		MyModel model=new MyModel();
@@ -43,10 +42,6 @@ public class Run {
 		view.addObserver(p);
 		model.addObserver(p);
 		view.start();
-		
-//		GUI win = new GUI();
-//		win.start();
-
 
 	}
 

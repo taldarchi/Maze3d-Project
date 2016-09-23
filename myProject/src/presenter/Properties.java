@@ -11,6 +11,7 @@ public class Properties implements Serializable {
 	private String generatorAlgorithm;
 	private String searchAlgorithm;
 	private int threadsNum;
+	private String userInterface;
 	
 	public Properties(){
 		this.generatorAlgorithm=null;
@@ -40,6 +41,12 @@ public class Properties implements Serializable {
 	}
 	public void setThreadsNum(int threadsNum) {
 		this.threadsNum = threadsNum;
+	}
+	public String getUserInterface() {
+		return userInterface;
+	}
+	public void setUserInterface(String userInterface) {
+		this.userInterface = userInterface;
 	}
 
 }

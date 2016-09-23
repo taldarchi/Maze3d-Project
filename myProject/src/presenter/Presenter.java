@@ -19,6 +19,7 @@ public class Presenter implements Observer{
 	public Presenter(MyView view, MyModel model){
 	      this.view=view;
 	      this.model=model;
+	      model.loadSolutionMap();
 	      HashMap<String,Command> map=new HashMap<String,Command>();
 		  map.put("dir", new Command_dir(view));
 		  map.put("generate_3d_maze", new Command_generate_3d_maze(view, model));
@@ -28,8 +29,6 @@ public class Presenter implements Observer{
 		  map.put("load_maze", new Command_load_maze(view, model));
 		  map.put("solve", new Command_solve(view, model));
 		  map.put("display_solution", new Command_display_solution(view, model));
-		  map.put("save_solution_map", new Command_save_solution_map(view, model));
-		  map.put("load_solution_map", new Command_load_solution_map(view, model));
 		  map.put("exit",new Command_exit(view));
 		  view.setMap(map);
 	}
@@ -37,6 +36,10 @@ public class Presenter implements Observer{
 	@Override
 	public void update(Observable o, Object arg) {
 		if(o==view){
+			if(arg.equals("save_solution_map")){
+				model.saveSolutionMap();
+				return;
+			}
 			Command command;
 			boolean bool=true;
 			String line=new String((String)arg);
@@ -63,4 +66,5 @@ public class Presenter implements Observer{
 			((View) view).printMessage(str);
 		}
 	}
+	
 }

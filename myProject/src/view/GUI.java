@@ -7,6 +7,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.MessageBox;
 
 public class GUI extends BaseWindow {
 
@@ -40,7 +41,6 @@ public class GUI extends BaseWindow {
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
-				// TODO Auto-generated method stub
 				
 			}
 		});
@@ -58,7 +58,6 @@ public class GUI extends BaseWindow {
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
-				// TODO Auto-generated method stub
 				
 			}
 		});
@@ -76,7 +75,6 @@ public class GUI extends BaseWindow {
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
-				// TODO Auto-generated method stub
 				
 			}
 		});
@@ -95,7 +93,6 @@ public class GUI extends BaseWindow {
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
-				// TODO Auto-generated method stub
 				
 			}
 		});
@@ -114,7 +111,6 @@ public class GUI extends BaseWindow {
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
-				// TODO Auto-generated method stub
 				
 			}
 		});
@@ -132,7 +128,6 @@ public class GUI extends BaseWindow {
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
-				// TODO Auto-generated method stub
 				
 			}
 		});
@@ -150,7 +145,6 @@ public class GUI extends BaseWindow {
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
-				// TODO Auto-generated method stub
 				
 			}
 		});
@@ -170,7 +164,6 @@ public class GUI extends BaseWindow {
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
-				// TODO Auto-generated method stub
 				
 			}
 		});
@@ -188,7 +181,6 @@ public class GUI extends BaseWindow {
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
-				// TODO Auto-generated method stub
 				
 			}
 		});
@@ -206,7 +198,6 @@ public class GUI extends BaseWindow {
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
-				// TODO Auto-generated method stub
 				
 			}
 		});
@@ -224,17 +215,23 @@ public class GUI extends BaseWindow {
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
-				// TODO Auto-generated method stub
 				
 			}
 		});
 		
 		
-		
-		
+
+
 //		mazeDisplay = new MazeDisplay(shell, SWT.BORDER);	
 //		mazeDisplay.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 //		mazeDisplay.setFocus();
 	}
+	public void message(String string){
+		MessageBox msg = new MessageBox(shell, SWT.OK);
+		msg.setText("Message");
+		msg.setMessage(string);
+		msg.open();
+	}
+	
 
 }

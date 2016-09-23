@@ -23,7 +23,7 @@ public class Character {
 	}
 	
 	public void draw(int x, int y, GC gc) {
-		gc.drawImage(img, 0, 0, img.getBounds().width, img.getBounds().height, x * pos.getX(), y * pos.getZ(), x, y);
+		gc.drawImage(img, 0, 0, img.getBounds().width, img.getBounds().height, x * pos.getX(), y * pos.getY(), x, y);
 	}
 	
 	public void moveUp() {

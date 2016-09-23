@@ -26,6 +26,8 @@ public class DisplayMazeWindow extends DialogWindow{
 		Label lblName = new Label(shell, SWT.NONE);
 		lblName.setText("Maze name: ");
 		
+		
+		
 		Text txtName = new Text(shell, SWT.BORDER);
 		txtName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 				

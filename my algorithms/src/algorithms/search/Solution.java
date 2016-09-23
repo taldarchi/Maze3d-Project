@@ -71,6 +71,8 @@ public class Solution<T> implements Serializable{
 	 */
 	public List<State<T>> getSolution(){
 		return path;
-	
+
+		
+		
 }
 }

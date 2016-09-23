@@ -37,11 +37,11 @@ public class DisplaySolutionWindow extends DialogWindow{
 		btnDisplayMaze.addSelectionListener(new SelectionListener() {
 			
 			@Override
-			public void widgetSelected(SelectionEvent arg0) {				
+			public void widgetSelected(SelectionEvent arg0){
 				MessageBox msg = new MessageBox(shell, SWT.OK);
 				msg.setText("Generating...");
 				//msg.setMessage("Button was clicked");
-				String name=txtName.getText();		
+				String name=txtName.getText();
 				msg.setMessage("Displaying solution for maze "+name);
 				msg.open();
 				String s="display "+name;

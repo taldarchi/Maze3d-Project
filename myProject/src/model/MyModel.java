@@ -58,6 +58,7 @@ public class MyModel extends Observable implements Model{
 	
 	/** The solutions. */
 	private HashMap<Maze3d, Solution<Position>> solutions=new HashMap<Maze3d,Solution<Position>>();
+	
 	private PlayedMaze maze;
 
 	/* (non-Javadoc)
@@ -244,9 +245,9 @@ public class MyModel extends Observable implements Model{
 	}
 
 	@Override
-	public void saveSolutionMap(String fileName){
+	public void saveSolutionMap(){
 		try {
-	        File file = new File(fileName);
+	        File file = new File("map.zip");
 	        ObjectOutputStream output;
 			output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
 	        output.writeObject(solutions);
@@ -261,9 +262,9 @@ public class MyModel extends Observable implements Model{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void loadSolutionMap(String fileName) {
+	public void loadSolutionMap() {
 		try {
-	        File file = new File(fileName);
+	        File file = new File("map.zip");
 	        ObjectInputStream input;
 			input = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)));
 	        Object readObject = input.readObject();
@@ -307,6 +308,8 @@ public class MyModel extends Observable implements Model{
 			return false;
 		return true;
 	}
+	
+
 	public Maze3dGenerator generateFromProperties(){
 		switch(PropertiesFile.getProperties().getGeneratorAlgorithm()){
 		case "simple":
