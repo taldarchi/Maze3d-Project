@@ -84,14 +84,14 @@ public interface Model{
 	 * @param name the name
 	 * @return the maze by name
 	 */
-	public Maze3d getMazeByName(String name);
+	public PlayedMaze getMazeByName(String name);
 
 	boolean solutionExists(Maze3d maze);
 	
 	public void saveSolutionMap();
 	public void loadSolutionMap();
 
-	public HashMap<String, Maze3d> getMazes();
+	public HashMap<String, PlayedMaze> getMazes();
 
 	public void forward(String string);
 	public void backwards(String string);
@@ -99,6 +99,11 @@ public interface Model{
 	public void down(String string);
 	public void left(String string);
 	public void right(String string);
+	
+	public void hint(String name);
+
+	public Position getCurrentPosition();
+
 
 
 

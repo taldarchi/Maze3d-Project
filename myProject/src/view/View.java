@@ -56,7 +56,7 @@ public interface View {
 	 *
 	 * @param maze the maze
 	 */
-	public void display(Maze3d maze);
+	public void display(Maze3d maze,String name);
 	
 	/**
 	 * Display cross section.
@@ -86,5 +86,11 @@ public interface View {
 	 */
 	public String getLine();
 	
+	public void updateMaze(Maze3d maze, String name);
+	
+	public void setCurrentPositionInGui(Position p);
+
+	public void move(Position currentPosition);
+
 
 }

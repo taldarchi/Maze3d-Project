@@ -40,8 +40,8 @@ public class Command_display implements Command {
 	 */
 	@Override
 	public void doCommand(String string) {
-		Maze3d maze=model.getMazeByName(string);
-		view.display(maze);
+		Maze3d maze=model.getMazeByName(string).getMaze();
+		view.display(maze,string);
 	}
 
 }

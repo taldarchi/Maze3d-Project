@@ -56,6 +56,7 @@ public class Command_generate_3d_maze implements Command {
 						algorithm=strings[4];
 				try {
 					model.generate3dMaze(name,z,x,y,algorithm);
+					view.updateMaze(model.getMazeByName(name).getMaze(), name);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				} catch (ExecutionException e) {

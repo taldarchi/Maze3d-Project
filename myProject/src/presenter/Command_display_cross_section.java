@@ -49,7 +49,7 @@ public class Command_display_cross_section implements Command {
 			if(!model.mazeNameCheck(name))
 				view.printMessage("Maze does not exist, try again");
 			else{
-				Maze3d maze=model.getMazeByName(name);
+				Maze3d maze=model.getMazeByName(name).getMaze();
 				String axis=strings[1];
 				try{
 				int index=Integer.parseInt(strings[2]);

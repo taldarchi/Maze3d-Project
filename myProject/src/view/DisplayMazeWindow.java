@@ -19,7 +19,7 @@ public class DisplayMazeWindow extends DialogWindow{
 	@Override
 	protected void initWidgets() {
 		shell.setText("Display maze window");
-		shell.setSize(350, 110);		
+		shell.setSize(500, 500);		
 				
 		shell.setLayout(new GridLayout(2, false));	
 		

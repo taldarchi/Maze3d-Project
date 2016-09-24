@@ -20,6 +20,7 @@ public class GenerateMazeWindow extends DialogWindow {
 
 	@Override
 	protected void initWidgets() {
+		
 		shell.setText("Generate maze window");
 		shell.setSize(350, 250);		
 				

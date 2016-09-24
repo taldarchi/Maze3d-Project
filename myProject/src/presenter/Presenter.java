@@ -6,6 +6,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
 
+import algorithms.mazeGenerators.Position;
 import model.Model;
 import model.MyModel;
 import view.MyView;
@@ -28,7 +29,14 @@ public class Presenter implements Observer{
 		  map.put("save_maze", new Command_save_maze(view, model));
 		  map.put("load_maze", new Command_load_maze(view, model));
 		  map.put("solve", new Command_solve(view, model));
-		  map.put("display_solution", new Command_display_solution(view, model));
+		  map.put("up", new Command_up(view, model));
+		  map.put("down", new Command_down(view, model));
+		  map.put("forward", new Command_forward(view, model));
+		  map.put("character_move", new Command_character_move(view,model));
+		  map.put("backwards", new Command_backwards(view, model));
+		  map.put("left", new Command_left(view, model));
+		  map.put("right", new Command_right(view, model));
+		  map.put("hint", new Command_hint(view, model));
 		  map.put("exit",new Command_exit(view));
 		  view.setMap(map);
 	}
@@ -62,9 +70,20 @@ public class Presenter implements Observer{
 			s.close();
 		}
 		if(o==model){
-			String str=(String)arg;
-			((View) view).printMessage(str);
+			if(arg instanceof Position)
+				view.setCurrentPositionInGui((Position)arg);
+			else if(arg.equals("character_move")){
+				Command c=new Command_character_move(view, model);
+				try {
+					c.doCommand("character_move");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			else{
+				String str=(String)arg;
+				((View) view).printMessage(str);
+			}
 		}
 	}
-	
 }

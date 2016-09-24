@@ -31,7 +31,7 @@ public class Command_display_solution implements Command {
 			view.printMessage("Bad parameters, try again");
 		else{
 			String name=strings[0];
-			Maze3d maze=model.getMazes().get(name);
+			Maze3d maze=model.getMazes().get(name).getMaze();
 			if(!model.mazeNameCheck(name))
 				view.printMessage("Maze does not exist, try again");
 			else if(!model.solutionExists(maze))

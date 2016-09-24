@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.concurrent.Callable;
@@ -54,12 +55,19 @@ public class MyModel extends Observable implements Model{
 	private ExecutorService executor = Executors.newFixedThreadPool(PropertiesFile.getProperties().getThreadsNum());
 	
 	/** The mazes. */
-	private HashMap<String,Maze3d> mazes=new HashMap<String,Maze3d>();
+	private HashMap<String,PlayedMaze> mazes=new HashMap<String,PlayedMaze>();
 	
 	/** The solutions. */
 	private HashMap<Maze3d, Solution<Position>> solutions=new HashMap<Maze3d,Solution<Position>>();
 	
-	private PlayedMaze maze;
+	private Position wantedPosition;
+	
+	private Maze3d currentMaze;
+	
+	private Position currentPosition;
+
+	private Solution<Position> currentSolution;
+	
 
 	/* (non-Javadoc)
 	 * @see model.Model#generate3dMaze(java.lang.String, int, int, int, java.lang.String)
@@ -73,28 +81,32 @@ public class MyModel extends Observable implements Model{
 			
 			@Override
 			public Maze3d call() throws Exception {
-				Maze3d maze = new Maze3d();
-				if(algorithm==null)
-					maze=generateFromProperties().generate(z, x, y);
+				if(algorithm==null){
+					currentMaze=generateFromProperties().generate(z, x, y);
+				}
 				else{
 					switch(algorithm){
 						case "simple":
-							maze= new SimpleMaze3dGenerator().generate(z, x, y);
-							return maze;
+							currentMaze= new SimpleMaze3dGenerator().generate(z, x, y);
+
+							return currentMaze;
 						case "growing_tree_last":
-							maze= new GetLastCell().generate(z, x, y);
-							return maze;
+							currentMaze= new GetLastCell().generate(z, x, y);
+
+							return currentMaze;
 						case"growing_tree_random":
-							maze= new GetRandomCell().generate(z, x, y);
-							return maze;
+							currentMaze= new GetRandomCell().generate(z, x, y);
+
+							return currentMaze;
 					}
 				}
-				return maze;
+				return currentMaze;
 			}
 		});
 		try {
 			Maze3d maze = m.get();
-			mazes.put(name,maze);
+			PlayedMaze p_maze=new PlayedMaze(maze);
+			mazes.put(name,p_maze);
 		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
 		}
@@ -111,7 +123,7 @@ public class MyModel extends Observable implements Model{
 	 */
 	@Override
 	public void saveMaze(String name, String fileName) throws IOException {
-		Maze3d maze=mazes.get(name);
+		Maze3d maze=mazes.get(name).getMaze();
 		OutputStream out=new MyCompressorOutputStream(new FileOutputStream(fileName));
 		try{
 		out.write(maze.toByteArray());
@@ -139,7 +151,8 @@ public class MyModel extends Observable implements Model{
 		in.read(b);
 		in.close();
 		Maze3d loaded=new Maze3d(b);
-		mazes.put(nameToSave, loaded);
+		PlayedMaze p_maze=new PlayedMaze(loaded);
+		mazes.put(nameToSave, p_maze);
 		}catch(FileNotFoundException e){
 			String message="File not found, try again";
 			setChanged();
@@ -155,7 +168,7 @@ public class MyModel extends Observable implements Model{
 	 */
 	@Override
 	public void solveMaze(String mazeName,String algorithm) {
-		Maze3d maze=mazes.get(mazeName);
+		Maze3d maze=mazes.get(mazeName).getMaze();
 		Future<Solution<Position>> s=executor.submit(new Callable<Solution<Position>>(){
 
 			@Override
@@ -216,14 +229,14 @@ public class MyModel extends Observable implements Model{
 	 * returns a maze by desired name
 	 */
 	@Override
-	public Maze3d getMazeByName(String name){
+	public PlayedMaze getMazeByName(String name){
 		if(!mazes.containsKey(name)){
 			String message="Maze not found, try again";
 			setChanged();
 			notifyObservers(message);
 		}
 		else{
-			Maze3d maze=mazes.get(name);
+			PlayedMaze maze=mazes.get(name);
 			return maze;
 		}
 		return null;
@@ -280,7 +293,7 @@ public class MyModel extends Observable implements Model{
 		
 	}
 	@Override
-	public HashMap<String, Maze3d> getMazes() {
+	public HashMap<String, PlayedMaze> getMazes() {
 		return mazes;
 	}
 
@@ -334,37 +347,94 @@ public class MyModel extends Observable implements Model{
 	}
 	
 	public void setMazeToPlay(String name){
-		this.maze.setMaze(getMazeByName(name));
-		this.maze.setSolution(getSolutions().get(getMazeByName(name)));
-		this.maze.setCurrentPosition(getMazeByName(name).getStartPosition());
+		this.currentMaze=this.getMazeByName(name).getMaze();
+		this.currentPosition=this.getMazeByName(name).getCurrentPosition();
+		this.currentSolution=this.getMazeByName(name).getSolution();
 		
+	}
+	
+	public void hint(String name){
+		Position pos=getSolutions().get(getMazeByName(name)).getSolution().get(0).getState();
+		setChanged();
+		notifyObservers(pos);
 	}
 	
 	public void up(String string){
-		this.maze.setCurrentPosition(new Position(this.maze.getCurrentPosition().getZ()+1,this.maze.getCurrentPosition().getX(),this.maze.getCurrentPosition().getY()));
+		setMazeToPlay(string);
+		this.wantedPosition = new Position(this.currentPosition.getZ()+1, this.currentPosition.getX(), this.currentPosition.getY());
+		//if((Arrays.asList(this.currentMaze.getPossibleMoves(currentPosition)).contains("Up"))){
+			this.currentPosition.setZ(this.wantedPosition.getZ());
+			this.currentPosition.setX(this.wantedPosition.getX());
+			this.currentPosition.setY(this.wantedPosition.getY());
+			setChanged();
+			notifyObservers("character_move");
+		//}
 	}
 	
 	public void down(String string){
-		this.maze.setCurrentPosition(new Position(this.maze.getCurrentPosition().getZ()-1,this.maze.getCurrentPosition().getX(),this.maze.getCurrentPosition().getY()));
-	
+		setMazeToPlay(string);
+		this.wantedPosition = new Position(this.currentPosition.getZ()-1, this.currentPosition.getX(), this.currentPosition.getY());
+		//if((Arrays.asList(this.currentMaze.getPossibleMoves(currentPosition)).contains("Down"))){
+			this.currentPosition.setZ(this.wantedPosition.getZ());
+			this.currentPosition.setX(this.wantedPosition.getX());
+			this.currentPosition.setY(this.wantedPosition.getY());
+			setChanged();
+			notifyObservers("character_move");
+		//}
 	}	
 	
 	public void forward(String string){
-		this.maze.setCurrentPosition(new Position(this.maze.getCurrentPosition().getZ(),this.maze.getCurrentPosition().getX()+1,this.maze.getCurrentPosition().getY()));
-		
+		setMazeToPlay(string);
+		this.wantedPosition = new Position(this.currentPosition.getZ(), this.currentPosition.getX()+1, this.currentPosition.getY());
+		if((Arrays.asList(this.currentMaze.getPossibleMoves(currentPosition)).contains("Forward"))){
+			this.currentPosition.setZ(this.wantedPosition.getZ());
+			this.currentPosition.setX(this.wantedPosition.getX());
+			this.currentPosition.setY(this.wantedPosition.getY());
+			setChanged();
+			notifyObservers("character_move");
+		}
 	}	
 	
 	public void backwards(String string){
-		this.maze.setCurrentPosition(new Position(this.maze.getCurrentPosition().getZ(),this.maze.getCurrentPosition().getX()-1,this.maze.getCurrentPosition().getY()));
-		
+		setMazeToPlay(string);
+		this.wantedPosition = new Position(this.currentPosition.getZ(), this.currentPosition.getX()-1, this.currentPosition.getY());
+		if((Arrays.asList(this.currentMaze.getPossibleMoves(currentPosition)).contains("Backwards"))){
+			this.currentPosition.setZ(this.wantedPosition.getZ());
+			this.currentPosition.setX(this.wantedPosition.getX());
+			this.currentPosition.setY(this.wantedPosition.getY());
+			setChanged();
+			notifyObservers("character_move");
+		}
 	}	
 	
 	public void right(String string){
-		this.maze.setCurrentPosition(new Position(this.maze.getCurrentPosition().getZ(),this.maze.getCurrentPosition().getX(),this.maze.getCurrentPosition().getY()+1));
+		setMazeToPlay(string);
+		this.wantedPosition = new Position(this.currentPosition.getZ(), this.currentPosition.getX(), this.currentPosition.getY()+1);
+		if((Arrays.asList(this.currentMaze.getPossibleMoves(currentPosition)).contains("Right"))){
+			this.currentPosition.setZ(this.wantedPosition.getZ());
+			this.currentPosition.setX(this.wantedPosition.getX());
+			this.currentPosition.setY(this.wantedPosition.getY());
+			setChanged();
+			notifyObservers("character_move");
+		}
 	}
 	
+
+
 	public void left(String string){
-		this.maze.setCurrentPosition(new Position(this.maze.getCurrentPosition().getZ(),this.maze.getCurrentPosition().getX(),this.maze.getCurrentPosition().getY()-1));
+		setMazeToPlay(string);
+		this.wantedPosition = new Position(this.currentPosition.getZ(), this.currentPosition.getX(), this.currentPosition.getY()-1);
+		if((Arrays.asList(this.currentMaze.getPossibleMoves(currentPosition)).contains("Left"))){
+			this.currentPosition.setZ(this.wantedPosition.getZ());
+			this.currentPosition.setX(this.wantedPosition.getX());
+			this.currentPosition.setY(this.wantedPosition.getY());
+			setChanged();
+			notifyObservers("character_move");
+		}
+	}
+
+	public Position getCurrentPosition() {
+		return currentPosition;
 	}
 		
 }

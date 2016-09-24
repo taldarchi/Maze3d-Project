@@ -10,7 +10,6 @@
 package view;
 
 import java.io.BufferedReader;
-import org.eclipse.swt.SWT;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -44,6 +43,7 @@ public class MyView extends Observable implements View {
 	
 	/** The map. */
 	private HashMap<String, Command> map;
+	
 	
 	/**
 	 * Instantiates a new my view.
@@ -87,8 +87,11 @@ public class MyView extends Observable implements View {
 	 * @see view.View#display(algorithms.mazeGenerators.Maze3d)
 	 */
 	@Override
-	public void display(Maze3d maze) {
-		out.println(maze);
+	public void display(Maze3d maze,String name) {
+		if(PropertiesFile.getProperties().getUserInterface()=="cli")
+			out.println(maze);
+		else
+			updateMaze(maze, name);
 	}
 
 	/* (non-Javadoc)
@@ -205,5 +208,20 @@ public class MyView extends Observable implements View {
 		return null;
 
 	}
+	
+	public void updateMaze(Maze3d maze, String name){
+		this.gui.displayCurrentMaze(maze, name);
+	}
+	
+	public void setCurrentPositionInGui(Position p){
+		this.gui.setCurrentPosition(p);
+		this.gui.setCharacterPositionInMazeDisplay(p);
+	}
+
+	@Override
+	public void move(Position currentPosition) {
+		this.gui.move(currentPosition);
+	}
+
 
 }

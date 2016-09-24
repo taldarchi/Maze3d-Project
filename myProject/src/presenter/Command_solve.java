@@ -45,7 +45,7 @@ public class Command_solve implements Command {
 			String name=strings[0];
 			if(!model.mazeNameCheck(name))
 				view.printMessage("Maze does not exist, try again");
-			else if(model.solutionExists(model.getMazes().get(name))){
+			else if(model.solutionExists(model.getMazes().get(name).getMaze())){
 				view.printMessage("Solution for "+name+" already exists:");
 				view.displaySolution(model.getSolutions().get(model.getMazes().get(name)));
 			}

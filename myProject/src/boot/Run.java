@@ -34,7 +34,7 @@ public class Run {
 	 * @throws InterruptedException 
 	 */
 	public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
-		PropertiesFile.writeProperties();
+		//PropertiesFile.writeProperties();
 		PropertiesFile.readProperties();
 	    MyView view=new MyView(new BufferedReader(new InputStreamReader(System.in)), new PrintWriter(System.out, true));
 		MyModel model=new MyModel();

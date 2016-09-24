@@ -54,13 +54,13 @@ public class SolveMazeWindow extends DialogWindow {
 				if(algorithm==null){
 					msg.setMessage("Solving maze "+name);
 					msg.open();
-					String s="solve_maze "+name;
+					String s="solve "+name;
 					view.executeCommand(s);
 				}
 				else{
 					msg.setMessage("Solving maze "+name+" with "+algorithm+" algorithm");
 					msg.open();
-					String s="solve_maze "+name+" "+algorithm;
+					String s="solve "+name+" "+algorithm;
 					view.executeCommand(s);
 				}
 

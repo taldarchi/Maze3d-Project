@@ -23,27 +23,7 @@ public class Character {
 	}
 	
 	public void draw(int x, int y, GC gc) {
-		gc.drawImage(img, 0, 0, img.getBounds().width, img.getBounds().height, x * pos.getX(), y * pos.getY(), x, y);
+		gc.drawImage(img, 0, 0, img.getBounds().width, img.getBounds().height, x * pos.getY(), y * pos.getX(), x, y);
 	}
-	
-	public void moveUp() {
-		pos.setZ(pos.getZ()+1);
-	}
-	public void moveDown() {
-		pos.setZ(pos.getZ()-1);	
-	}
-	public void moveForward() {
-		pos.setX(pos.getX()+1);	
-	}
-	public void moveBackwards() {
-		pos.setX(pos.getX()-1);	
-	}
-	public void moveRight() {
-		pos.setY(pos.getY()+1);	
-	}
-	public void moveLeft() {
-		pos.setY(pos.getY()-1);
-	}
-	
 
 }

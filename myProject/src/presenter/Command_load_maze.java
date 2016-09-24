@@ -48,8 +48,11 @@ public class Command_load_maze implements Command {
 			String nameToSave=strings[1];
 			if(model.mazeNameCheck(nameToSave))
 				view.printMessage("Maze name already exists, try again");
-			else
+			else{
 				model.loadMaze(fileName, nameToSave);
+				view.updateMaze(model.getMazeByName(nameToSave).getMaze(), nameToSave);
+			}
+			
 
 		}
 
