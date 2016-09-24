@@ -103,6 +103,8 @@ public interface Model{
 	public void hint(String name);
 
 	public Position getCurrentPosition();
+	
+	public void readProperties(String filename);
 
 
 

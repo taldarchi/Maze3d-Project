@@ -152,7 +152,10 @@ public class MyView extends Observable implements View {
 		setChanged();
 		notifyObservers(s);
 		
-		out.println("Quiting everything...");
+		if(cli!=null)
+			out.println("Quiting...");
+		else
+			gui.message("Quiting...");
 		in.close();
 		out.flush();
 		out.close();

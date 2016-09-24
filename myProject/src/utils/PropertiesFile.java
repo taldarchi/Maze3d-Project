@@ -26,16 +26,11 @@ public class PropertiesFile {
 		}
 	}
 	
-	public static void readProperties() {
+	public static void readProperties(String filename) throws FileNotFoundException {
 		XMLDecoder decoder;
-		try {
-			decoder = new XMLDecoder(new FileInputStream("properties.xml"));
+			decoder = new XMLDecoder(new FileInputStream(filename));
 			properties=(Properties) decoder.readObject();
 			decoder.close();
-		} catch (FileNotFoundException e) {
-			System.out.println("Properties file not found");
-			e.printStackTrace();
-		}
 	}
 
 	public static Properties getProperties(){

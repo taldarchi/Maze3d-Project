@@ -66,6 +66,8 @@ public class MyModel extends Observable implements Model{
 	
 	private Position currentPosition;
 	
+	private boolean simpleAlgorithm;
+	
 
 	/* (non-Javadoc)
 	 * @see model.Model#generate3dMaze(java.lang.String, int, int, int, java.lang.String)
@@ -86,6 +88,7 @@ public class MyModel extends Observable implements Model{
 					switch(algorithm){
 						case "simple":
 							currentMaze= new SimpleMaze3dGenerator().generate(z, x, y);
+							simpleAlgorithm=true;
 							return currentMaze;
 							
 						case "growing_tree_last":
@@ -323,6 +326,7 @@ public class MyModel extends Observable implements Model{
 	public Maze3dGenerator generateFromProperties(){
 		switch(PropertiesFile.getProperties().getGeneratorAlgorithm()){
 		case "simple":
+			simpleAlgorithm=true;
 			return new SimpleMaze3dGenerator();
 		case "growing_tree_last":
 			return new GetLastCell();
@@ -356,7 +360,10 @@ public class MyModel extends Observable implements Model{
 	
 	public void up(String string){
 		setMazeToPlay(string);
-		this.wantedPosition = new Position(this.currentPosition.getZ()+2, this.currentPosition.getX(), this.currentPosition.getY());
+		if(simpleAlgorithm)
+			this.wantedPosition = new Position(this.currentPosition.getZ()+1, this.currentPosition.getX(), this.currentPosition.getY());
+		else
+			this.wantedPosition = new Position(this.currentPosition.getZ()+2, this.currentPosition.getX(), this.currentPosition.getY());
 		if((Arrays.asList(this.currentMaze.getPossibleMoves(currentPosition)).contains("Up"))){
 			this.currentPosition.setZ(this.wantedPosition.getZ());
 			this.currentPosition.setX(this.wantedPosition.getX());
@@ -368,7 +375,10 @@ public class MyModel extends Observable implements Model{
 	
 	public void down(String string){
 		setMazeToPlay(string);
-		this.wantedPosition = new Position(this.currentPosition.getZ()-2, this.currentPosition.getX(), this.currentPosition.getY());
+		if(simpleAlgorithm)
+			this.wantedPosition = new Position(this.currentPosition.getZ()-1, this.currentPosition.getX(), this.currentPosition.getY());
+		else
+			this.wantedPosition = new Position(this.currentPosition.getZ()-2, this.currentPosition.getX(), this.currentPosition.getY());
 		if((Arrays.asList(this.currentMaze.getPossibleMoves(currentPosition)).contains("Down"))){
 			this.currentPosition.setZ(this.wantedPosition.getZ());
 			this.currentPosition.setX(this.wantedPosition.getX());
@@ -430,6 +440,15 @@ public class MyModel extends Observable implements Model{
 
 	public Position getCurrentPosition() {
 		return currentPosition;
+	}
+	
+	public void readProperties(String filename){
+		try {
+			PropertiesFile.readProperties(filename);
+		} catch (FileNotFoundException e) {
+			setChanged();
+			notifyObservers("Properties file not found");
+		}
 	}
 		
 }

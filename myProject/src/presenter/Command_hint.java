@@ -7,11 +7,9 @@ import utils.PropertiesFile;
 import view.View;
 
 public class Command_hint implements Command{
-	private View view;
 	private Model model;
 	
 	public Command_hint(View view,Model model){
-		this.view=view;
 		this.model=model;
 	}
 

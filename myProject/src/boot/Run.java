@@ -35,7 +35,7 @@ public class Run {
 	 */
 	public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
 		//PropertiesFile.writeProperties();
-		PropertiesFile.readProperties();
+		PropertiesFile.readProperties("properties.xml");
 	    MyView view=new MyView(new BufferedReader(new InputStreamReader(System.in)), new PrintWriter(System.out, true));
 		MyModel model=new MyModel();
 		Presenter p=new Presenter(view,model);

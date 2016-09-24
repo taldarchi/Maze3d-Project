@@ -3,6 +3,7 @@ package view;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -15,7 +16,6 @@ import org.eclipse.swt.widgets.MessageBox;
 
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
-import utils.PropertiesFile;
 
 public class GUI extends BaseWindow {
 
@@ -28,8 +28,6 @@ public class GUI extends BaseWindow {
 	private int[][] crossSection;
 	private Position currentPosition;
 
-	
-	
 	public GUI(MyView view) {
 		this.view=view;
 	}
@@ -38,10 +36,13 @@ public class GUI extends BaseWindow {
 	protected void initWidgets() {
 		GridLayout grid = new GridLayout(2, false);
 		shell.setLayout(grid);
+		shell.setBackgroundMode(SWT.INHERIT_DEFAULT);
+		shell.setBackgroundImage(new Image(null, "images/background.jpg"));
 		
 		Composite buttons = new Composite(shell, SWT.NONE);
 		RowLayout rowLayout = new RowLayout(SWT.VERTICAL);
 		buttons.setLayout(rowLayout);
+		
 		
 		//center of screen
 		Rectangle bounds = display.getPrimaryMonitor().getBounds();
@@ -59,6 +60,23 @@ public class GUI extends BaseWindow {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
 				GenerateMazeWindow win = new GenerateMazeWindow(view);				
+				win.start(display);
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				
+			}
+		});
+		
+		Button btnDisplayMaze = new Button(buttons, SWT.PUSH);
+		btnDisplayMaze.setText("Choose maze to play");
+		
+		btnDisplayMaze.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				DisplayMazeWindow win = new DisplayMazeWindow(view);				
 				win.start(display);
 			}
 			
@@ -87,14 +105,32 @@ public class GUI extends BaseWindow {
 			public void widgetDefaultSelected(SelectionEvent arg0) { }
 		});
 		
-		Button btnDisplayMaze = new Button(buttons, SWT.PUSH);
-		btnDisplayMaze.setText("Display maze");
 		
-		btnDisplayMaze.addSelectionListener(new SelectionListener() {
+		Button btnSolveMaze = new Button(buttons, SWT.PUSH);
+		btnSolveMaze.setText("Solve maze");
+		
+		btnSolveMaze.addSelectionListener(new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				DisplayMazeWindow win = new DisplayMazeWindow(view);				
+				SolveMazeWindow win = new SolveMazeWindow(view);				
+				win.start(display);
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				
+			}
+		});
+		
+		Button btnOpenProperties = new Button(buttons, SWT.PUSH);
+		btnOpenProperties.setText("Load properties file");
+		
+		btnOpenProperties.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				PropertiesWindow win=new PropertiesWindow(view);
 				win.start(display);
 			}
 			
@@ -139,43 +175,6 @@ public class GUI extends BaseWindow {
 			}
 		});
 		
-		Button btnDisplaySolution = new Button(buttons, SWT.PUSH);
-		btnDisplaySolution.setText("Display solution");
-		
-		btnDisplaySolution.addSelectionListener(new SelectionListener() {
-			
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				DisplaySolutionWindow win = new DisplaySolutionWindow(view);				
-				win.start(display);
-			}
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-				
-			}
-		});
-		
-		
-		
-		Button btnSolveMaze = new Button(buttons, SWT.PUSH);
-		btnSolveMaze.setText("Solve maze");
-		
-		btnSolveMaze.addSelectionListener(new SelectionListener() {
-			
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				SolveMazeWindow win = new SolveMazeWindow(view);				
-				win.start(display);
-			}
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-				
-			}
-		});
-		
-		
 		Button btnExit = new Button(buttons, SWT.PUSH);
 		btnExit.setText("Exit");
 		
@@ -217,6 +216,7 @@ public class GUI extends BaseWindow {
 		this.mazeDisplay.setMaze(this.maze);
 		this.mazeDisplay.setMazeLoaded();
 		this.mazeDisplay.setCurrentPosition(maze.getStartPosition());
+		this.mazeDisplay.setFinish();
 	}
 	
 	public void message(String string){
@@ -243,6 +243,13 @@ public class GUI extends BaseWindow {
 		this.mazeDisplay.setCrossSection(this.crossSection);
 		this.mazeDisplay.setCharacterPosition(p);
 		this.mazeDisplay.setCurrentPosition(p);
+		if(p.equals(maze.getGoalPosition())){
+			MessageBox msg = new MessageBox(shell, SWT.OK);
+			msg.setText("Message");
+	     	msg.setMessage("You Won!!!");
+			msg.open();
+		}
+			
 	}
 
 }

@@ -33,6 +33,7 @@ public class Presenter implements Observer{
 		  map.put("down", new Command_down(view, model));
 		  map.put("forward", new Command_forward(view, model));
 		  map.put("character_move", new Command_character_move(view,model));
+		  map.put("load_properties", new Command_read_properties(view,model));
 		  map.put("backwards", new Command_backwards(view, model));
 		  map.put("left", new Command_left(view, model));
 		  map.put("right", new Command_right(view, model));

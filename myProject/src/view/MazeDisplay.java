@@ -5,6 +5,8 @@ import java.util.Arrays;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
@@ -27,6 +29,7 @@ public class MazeDisplay extends Canvas {
 	private Image arrowupanddown;
 	private Image gold;
 	private Image arrowtothegold;
+	private Image winner;
 	private Position goalPosition;
 	private Position hintPosition;
 	private boolean finish;
@@ -39,12 +42,13 @@ public class MazeDisplay extends Canvas {
 		maze=new Maze3d();
 		character = new Character();
 		character.setPos(new Position(-1, -1, -1));
-		wall = new Image(null,"images/wall.jpg");
+		wall = new Image(null,"images/wall.png");
 		arrowup=new Image(null,"images/arrowup.png");
 		arrowdown=new Image(null,"images/arrowdown.png");
 		arrowupanddown=new Image(null,"images/arrowupanddown.png");
 		gold=new Image(null,"images/gold.jpg");
 		arrowtothegold=new Image(null,"images/arrowtothegold.png");
+		winner=new Image(null,"images/winner.jpg");
 		finish=false;
 						
 		this.addKeyListener(new KeyListener() {
@@ -60,80 +64,106 @@ public class MazeDisplay extends Canvas {
 					switch (e.keyCode) {
 					case SWT.ARROW_RIGHT:
 						command="right "+mazeName;
+						view.executeCommand(command);
 						break;
 					
 					case SWT.ARROW_LEFT:	
 						command="left "+mazeName;
+						view.executeCommand(command);
 						break;
 						
 					case SWT.ARROW_UP:			
 						command="backwards "+mazeName;
+						view.executeCommand(command);
 						break;
 						
 					case SWT.ARROW_DOWN:			
 						command="forward "+mazeName;
+						view.executeCommand(command);
 						break;
 						
 					case SWT.PAGE_UP:		
 						command="up "+mazeName;
+						view.executeCommand(command);
 						break;
 						
 					case SWT.PAGE_DOWN:		
 						command="down "+mazeName;
+						view.executeCommand(command);
 						break;
 						
 					default: 
 						break;
 					}
-				view.executeCommand(command);
 				redraw();
 				}
 			}
+		});
+		
+		//control+mousewheel listener bonus
+		this.addMouseWheelListener(new MouseWheelListener() {
+
+		    @Override
+		    public void mouseScrolled(MouseEvent g) {
+		        if((g.stateMask & SWT.CONTROL) == SWT.CONTROL) {
+		        	if (g.count > 0)
+		        		setSize(getSize().x+50, getSize().y+50);
+		        	if (g.count < 0)
+		        		setSize(getSize().x-50, getSize().y-50);
+		        }
+				redraw();
+		    }
 		});
 		
 		this.addPaintListener(new PaintListener() {
 			
 			@Override
 			public void paintControl(PaintEvent e) {
-				e.gc.setForeground(new Color(null,200,100,0));
-				e.gc.setBackground(new Color(null,0,0,0));
-				   
-				int x,y;
-				   
-				int width=getSize().x;
-				int height=getSize().y;
-				int cellWidth=width / crossSection[0].length;
-				int cellHeight= height / crossSection.length;
-				   
-				for (int i = 0; i < crossSection.length; i++) {
-					for (int j = 0; j < crossSection[i].length; j++) {
-						x = j * cellWidth;
-						y = i * cellHeight;
-						if (crossSection[i][j] != 0)
-							e.gc.drawImage(wall, 0, 0, wall.getBounds().width, wall.getBounds().height, x, y, cellWidth, cellHeight);
-						if(mazeLoaded){
-							if(maze.getGoalPosition().equals(new Position(currentPosition.getZ(),i,j)))
-								e.gc.drawImage(gold, 0, 0, gold.getBounds().width, gold.getBounds().height, x, y, cellWidth, cellHeight);
-							Position temp=new Position(maze.getGoalPosition().getZ()-2,maze.getGoalPosition().getX(),maze.getGoalPosition().getY());				
-							if(temp.equals(new Position(currentPosition.getZ(),i,j)))
-								e.gc.drawImage(arrowtothegold, 0, 0, arrowtothegold.getBounds().width, arrowtothegold.getBounds().height, x, y, cellWidth, cellHeight);
-							else if(Arrays.asList(maze.getPossibleMoves(new Position(currentPosition.getZ(),i,j))).contains("Up") && Arrays.asList(maze.getPossibleMoves(new Position(currentPosition.getZ(),i,j))).contains("Down"))
-								e.gc.drawImage(arrowupanddown, 0, 0, arrowupanddown.getBounds().width, arrowupanddown.getBounds().height, x, y, cellWidth, cellHeight);
-							else if(Arrays.asList(maze.getPossibleMoves(new Position(currentPosition.getZ(),i,j))).contains("Up") && !Arrays.asList(maze.getPossibleMoves(new Position(currentPosition.getZ(),i,j))).contains("Down"))
-								e.gc.drawImage(arrowup, 0, 0, arrowup.getBounds().width, arrowup.getBounds().height, x, y, cellWidth, cellHeight);
-							else if(!Arrays.asList(maze.getPossibleMoves(new Position(currentPosition.getZ(),i,j))).contains("Up") && Arrays.asList(maze.getPossibleMoves(new Position(currentPosition.getZ(),i,j))).contains("Down")&&!maze.getGoalPosition().equals(new Position(currentPosition.getZ(),i,j)))
-								e.gc.drawImage(arrowdown, 0, 0, arrowdown.getBounds().width, arrowdown.getBounds().height, x, y, cellWidth, cellHeight);
+				
+					e.gc.setForeground(new Color(null,200,100,0));
+					e.gc.setBackground(new Color(null,0,0,0));
+					   
+					int x,y;
+					   
+					int width=getSize().x;
+					int height=getSize().y;
+					int cellWidth=width / crossSection[0].length;
+					int cellHeight= height / crossSection.length;
+					
+				if(!finish){
+					for (int i = 0; i < crossSection.length; i++) {
+						for (int j = 0; j < crossSection[i].length; j++) {
+							x = j * cellWidth;
+							y = i * cellHeight;
+							if (crossSection[i][j] != 0)
+								e.gc.drawImage(wall, 0, 0, wall.getBounds().width, wall.getBounds().height, x, y, cellWidth, cellHeight);
+							else if(mazeLoaded){
+								if(maze.getGoalPosition().equals(new Position(currentPosition.getZ(),i,j))){
+									e.gc.drawImage(gold, 0, 0, gold.getBounds().width, gold.getBounds().height, x, y, cellWidth, cellHeight);
+									finish=true;
+								}
+								Position temp=new Position(maze.getGoalPosition().getZ()-2,maze.getGoalPosition().getX(),maze.getGoalPosition().getY());				
+								if(temp.equals(new Position(currentPosition.getZ(),i,j)))
+									e.gc.drawImage(arrowtothegold, 0, 0, arrowtothegold.getBounds().width, arrowtothegold.getBounds().height, x, y, cellWidth, cellHeight);
+								else if(Arrays.asList(maze.getPossibleMoves(new Position(currentPosition.getZ(),i,j))).contains("Up") && Arrays.asList(maze.getPossibleMoves(new Position(currentPosition.getZ(),i,j))).contains("Down"))
+									e.gc.drawImage(arrowupanddown, 0, 0, arrowupanddown.getBounds().width, arrowupanddown.getBounds().height, x, y, cellWidth, cellHeight);
+								else if(Arrays.asList(maze.getPossibleMoves(new Position(currentPosition.getZ(),i,j))).contains("Up") && !Arrays.asList(maze.getPossibleMoves(new Position(currentPosition.getZ(),i,j))).contains("Down"))
+									e.gc.drawImage(arrowup, 0, 0, arrowup.getBounds().width, arrowup.getBounds().height, x, y, cellWidth, cellHeight);
+								else if(!Arrays.asList(maze.getPossibleMoves(new Position(currentPosition.getZ(),i,j))).contains("Up") && Arrays.asList(maze.getPossibleMoves(new Position(currentPosition.getZ(),i,j))).contains("Down")&&!maze.getGoalPosition().equals(new Position(currentPosition.getZ(),i,j)))
+									e.gc.drawImage(arrowdown, 0, 0, arrowdown.getBounds().width, arrowdown.getBounds().height, x, y, cellWidth, cellHeight);
+							}
 						}
 					}
+						character.draw(cellWidth, cellHeight, e.gc);
 				}
-				character.draw(cellWidth, cellHeight, e.gc);
+				//else
+					//e.gc.drawImage(winner, 0, 0, winner.getBounds().width, winner.getBounds().height,x, y, cellWidth, cellHeight);
 			}
 		});
 	}
+	
 	public void setCharacterPosition(Position p) {
 		this.character.setPos(p);
-		if(p.equals(maze.getGoalPosition()))
-			finish=true;
 		redrawObject();
 	}
 	
@@ -171,6 +201,10 @@ public class MazeDisplay extends Canvas {
 
 	public void setMazeLoaded() {
 		this.mazeLoaded = true;
+	}
+	
+	public void setFinish() {
+		this.finish = false;
 	}
 
 //	public void drawHint(Position hintPosition){

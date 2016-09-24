@@ -10,6 +10,7 @@ import java.util.List;
 import algorithms.mazeGenerators.GetRandomCell;
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
+import algorithms.mazeGenerators.SimpleMaze3dGenerator;
 import algorithms.search.BFS;
 import algorithms.search.CommonSearcher;
 import algorithms.search.DFS;
@@ -26,9 +27,9 @@ public class Demo {
 	 * Run.
 	 */
 	public static void Run(){
-		//Maze3d maze=new SimpleMaze3dGenerator().generate(6, 15, 15);
+		Maze3d maze=new SimpleMaze3dGenerator().generate(6, 15, 15);
 		//Maze3d maze=new GetLastCell().generate(6, 5, 5);
-		Maze3d maze=new GetRandomCell().generate(10,10,10);
+		//Maze3d maze=new GetRandomCell().generate(10,10,10);
 		System.out.println(maze);
 		MazeAdapter m=new MazeAdapter(maze);
 		CommonSearcher<Position> searcher;
