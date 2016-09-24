@@ -101,9 +101,7 @@ public abstract class GrowingTreeGenerator extends Maze3dGeneratorAbstract{
 			}
 			else
 				C.remove(c);
-			
 		}
-			
 		Maze3d m = new Maze3d(); //finally setting the maze
 		m.setMaze3d(temp);
 		

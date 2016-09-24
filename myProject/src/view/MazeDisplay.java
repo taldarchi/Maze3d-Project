@@ -1,5 +1,7 @@
 package view;
 
+import java.util.Arrays;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
@@ -20,10 +22,17 @@ public class MazeDisplay extends Canvas {
 	private Character character;
 	private int[][] crossSection = {{0},{0}};
 	private Image wall;
+	private Image arrowup;
+	private Image arrowdown;
+	private Image arrowupanddown;
+	private Image gold;
+	private Image arrowtothegold;
 	private Position goalPosition;
 	private Position hintPosition;
 	private boolean finish;
 	private boolean hint;
+	private Position currentPosition;
+	private boolean mazeLoaded;
 
 	public MazeDisplay(Composite parent, int style,MyView view) {
 		super(parent, style);
@@ -31,14 +40,17 @@ public class MazeDisplay extends Canvas {
 		character = new Character();
 		character.setPos(new Position(-1, -1, -1));
 		wall = new Image(null,"images/wall.jpg");
+		arrowup=new Image(null,"images/arrowup.png");
+		arrowdown=new Image(null,"images/arrowdown.png");
+		arrowupanddown=new Image(null,"images/arrowupanddown.png");
+		gold=new Image(null,"images/gold.jpg");
+		arrowtothegold=new Image(null,"images/arrowtothegold.png");
 		finish=false;
 						
 		this.addKeyListener(new KeyListener() {
 			
 			@Override
-			public void keyReleased(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				
+			public void keyReleased(KeyEvent arg0) {	
 			}
 			
 			@Override
@@ -65,9 +77,11 @@ public class MazeDisplay extends Canvas {
 					case SWT.PAGE_UP:		
 						command="up "+mazeName;
 						break;
+						
 					case SWT.PAGE_DOWN:		
 						command="down "+mazeName;
 						break;
+						
 					default: 
 						break;
 					}
@@ -97,15 +111,29 @@ public class MazeDisplay extends Canvas {
 						y = i * cellHeight;
 						if (crossSection[i][j] != 0)
 							e.gc.drawImage(wall, 0, 0, wall.getBounds().width, wall.getBounds().height, x, y, cellWidth, cellHeight);
+						if(mazeLoaded){
+							if(maze.getGoalPosition().equals(new Position(currentPosition.getZ(),i,j)))
+								e.gc.drawImage(gold, 0, 0, gold.getBounds().width, gold.getBounds().height, x, y, cellWidth, cellHeight);
+							Position temp=new Position(maze.getGoalPosition().getZ()-2,maze.getGoalPosition().getX(),maze.getGoalPosition().getY());				
+							if(temp.equals(new Position(currentPosition.getZ(),i,j)))
+								e.gc.drawImage(arrowtothegold, 0, 0, arrowtothegold.getBounds().width, arrowtothegold.getBounds().height, x, y, cellWidth, cellHeight);
+							else if(Arrays.asList(maze.getPossibleMoves(new Position(currentPosition.getZ(),i,j))).contains("Up") && Arrays.asList(maze.getPossibleMoves(new Position(currentPosition.getZ(),i,j))).contains("Down"))
+								e.gc.drawImage(arrowupanddown, 0, 0, arrowupanddown.getBounds().width, arrowupanddown.getBounds().height, x, y, cellWidth, cellHeight);
+							else if(Arrays.asList(maze.getPossibleMoves(new Position(currentPosition.getZ(),i,j))).contains("Up") && !Arrays.asList(maze.getPossibleMoves(new Position(currentPosition.getZ(),i,j))).contains("Down"))
+								e.gc.drawImage(arrowup, 0, 0, arrowup.getBounds().width, arrowup.getBounds().height, x, y, cellWidth, cellHeight);
+							else if(!Arrays.asList(maze.getPossibleMoves(new Position(currentPosition.getZ(),i,j))).contains("Up") && Arrays.asList(maze.getPossibleMoves(new Position(currentPosition.getZ(),i,j))).contains("Down")&&!maze.getGoalPosition().equals(new Position(currentPosition.getZ(),i,j)))
+								e.gc.drawImage(arrowdown, 0, 0, arrowdown.getBounds().width, arrowdown.getBounds().height, x, y, cellWidth, cellHeight);
+						}
 					}
 				}
-				
 				character.draw(cellWidth, cellHeight, e.gc);
 			}
 		});
 	}
 	public void setCharacterPosition(Position p) {
 		this.character.setPos(p);
+		if(p.equals(maze.getGoalPosition()))
+			finish=true;
 		redrawObject();
 	}
 	
@@ -136,7 +164,14 @@ public class MazeDisplay extends Canvas {
 		this.maze=maze;
 		
 	}
-	
+	public void setCurrentPosition(Position p){
+		this.currentPosition=new Position(p);
+
+	}
+
+	public void setMazeLoaded() {
+		this.mazeLoaded = true;
+	}
 
 //	public void drawHint(Position hintPosition){
 //		this.hint = true;

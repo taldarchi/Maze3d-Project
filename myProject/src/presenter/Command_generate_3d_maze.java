@@ -52,17 +52,23 @@ public class Command_generate_3d_maze implements Command {
 				int x=Integer.parseInt(strings[2]);
 				int y=Integer.parseInt(strings[3]);
 				String algorithm=null;
-					if(strings.length==5)
-						algorithm=strings[4];
 				try {
+				if(strings.length==5){
+					algorithm=strings[4];
+					if(!algorithm.equals("simple")&&!algorithm.equals("growing_tree_random")&&!algorithm.equals("growing_tree_last"))
+						view.printMessage("Algorithm does not exist, try again");
+					else{
+						model.generate3dMaze(name,z,x,y,algorithm);
+						view.updateMaze(model.getMazeByName(name).getMaze(), name);
+					}
+				}
+				else{
 					model.generate3dMaze(name,z,x,y,algorithm);
 					view.updateMaze(model.getMazeByName(name).getMaze(), name);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-					e.printStackTrace();
 				}
-					
+				} catch (InterruptedException|ExecutionException e) {
+					e.printStackTrace();	
+				}
 			}
 		}
 	}

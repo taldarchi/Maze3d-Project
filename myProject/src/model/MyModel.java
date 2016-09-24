@@ -65,8 +65,6 @@ public class MyModel extends Observable implements Model{
 	private Maze3d currentMaze;
 	
 	private Position currentPosition;
-
-	private Solution<Position> currentSolution;
 	
 
 	/* (non-Javadoc)
@@ -88,15 +86,14 @@ public class MyModel extends Observable implements Model{
 					switch(algorithm){
 						case "simple":
 							currentMaze= new SimpleMaze3dGenerator().generate(z, x, y);
-
 							return currentMaze;
+							
 						case "growing_tree_last":
 							currentMaze= new GetLastCell().generate(z, x, y);
-
 							return currentMaze;
+							
 						case"growing_tree_random":
 							currentMaze= new GetRandomCell().generate(z, x, y);
-
 							return currentMaze;
 					}
 				}
@@ -349,8 +346,6 @@ public class MyModel extends Observable implements Model{
 	public void setMazeToPlay(String name){
 		this.currentMaze=this.getMazeByName(name).getMaze();
 		this.currentPosition=this.getMazeByName(name).getCurrentPosition();
-		this.currentSolution=this.getMazeByName(name).getSolution();
-		
 	}
 	
 	public void hint(String name){
@@ -361,26 +356,26 @@ public class MyModel extends Observable implements Model{
 	
 	public void up(String string){
 		setMazeToPlay(string);
-		this.wantedPosition = new Position(this.currentPosition.getZ()+1, this.currentPosition.getX(), this.currentPosition.getY());
-		//if((Arrays.asList(this.currentMaze.getPossibleMoves(currentPosition)).contains("Up"))){
+		this.wantedPosition = new Position(this.currentPosition.getZ()+2, this.currentPosition.getX(), this.currentPosition.getY());
+		if((Arrays.asList(this.currentMaze.getPossibleMoves(currentPosition)).contains("Up"))){
 			this.currentPosition.setZ(this.wantedPosition.getZ());
 			this.currentPosition.setX(this.wantedPosition.getX());
 			this.currentPosition.setY(this.wantedPosition.getY());
 			setChanged();
 			notifyObservers("character_move");
-		//}
+		}
 	}
 	
 	public void down(String string){
 		setMazeToPlay(string);
-		this.wantedPosition = new Position(this.currentPosition.getZ()-1, this.currentPosition.getX(), this.currentPosition.getY());
-		//if((Arrays.asList(this.currentMaze.getPossibleMoves(currentPosition)).contains("Down"))){
+		this.wantedPosition = new Position(this.currentPosition.getZ()-2, this.currentPosition.getX(), this.currentPosition.getY());
+		if((Arrays.asList(this.currentMaze.getPossibleMoves(currentPosition)).contains("Down"))){
 			this.currentPosition.setZ(this.wantedPosition.getZ());
 			this.currentPosition.setX(this.wantedPosition.getX());
 			this.currentPosition.setY(this.wantedPosition.getY());
 			setChanged();
 			notifyObservers("character_move");
-		//}
+		}
 	}	
 	
 	public void forward(String string){

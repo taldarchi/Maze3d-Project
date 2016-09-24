@@ -134,17 +134,17 @@ public class Maze3d implements Serializable{
 		ArrayList<String> possibleMoves=new ArrayList<String>();
 			if((p.getZ()<=maze3d.length)&&(p.getX()<=maze3d[0].length)&&(p.getY()<=maze3d[0][0].length))
 			{
-				if ((p.getZ()+2<maze3d.length)&&(maze3d[p.getZ()+2][p.getX()][p.getY()]==0))
+				if ((p.getZ()+1<maze3d.length)&&(maze3d[p.getZ()+1][p.getX()][p.getY()]==0))
 					possibleMoves.add("Up");
-				if ((p.getX()+2<maze3d[0].length)&&(maze3d[p.getZ()][p.getX()+2][p.getY()]==0))
+				if ((p.getX()+1<maze3d[0].length)&&(maze3d[p.getZ()][p.getX()+1][p.getY()]==0))
 					possibleMoves.add("Forward");
-				if ((p.getY()+2<maze3d[0][0].length)&&(maze3d[p.getZ()][p.getX()][p.getY()+2]==0))
+				if ((p.getY()+1<maze3d[0][0].length)&&(maze3d[p.getZ()][p.getX()][p.getY()+1]==0))
 					possibleMoves.add("Right");
-				if ((p.getZ()-2>=0)&&(maze3d[p.getZ()-2][p.getX()][p.getY()]==0))
+				if ((p.getZ()-1>=0)&&(maze3d[p.getZ()-1][p.getX()][p.getY()]==0))
 					possibleMoves.add("Down");
-				if ((p.getX()-2>=0)&&(maze3d[p.getZ()][p.getX()-2][p.getY()]==0))
+				if ((p.getX()-1>=0)&&(maze3d[p.getZ()][p.getX()-1][p.getY()]==0))
 					possibleMoves.add("Backwards");
-				if ((p.getY()-2>=0)&&(maze3d[p.getZ()][p.getX()][p.getY()-2]==0))
+				if ((p.getY()-1>=0)&&(maze3d[p.getZ()][p.getX()][p.getY()-1]==0))
 					possibleMoves.add("Left");
 			}
 		String [] moves=new String[possibleMoves.size()];

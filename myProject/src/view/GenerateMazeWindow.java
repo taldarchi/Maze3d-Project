@@ -70,12 +70,14 @@ public class GenerateMazeWindow extends DialogWindow {
 				MessageBox msg = new MessageBox(shell, SWT.OK);
 				msg.setText("Generating...");
 				String name=txtName.getText();
+				try{
 				int floors=Integer.parseInt(txtFloors.getText());
 				int rows = Integer.parseInt(txtRows.getText());
 				int cols = Integer.parseInt(txtColumns.getText());
+
 				String algorithm=txtAlgorithm.getText();
 				
-				if(algorithm==null){
+				if(algorithm.isEmpty()){
 					msg.setMessage("Generating maze "+name+ " with "+floors+" floors, "+rows+" rows and "+cols+" columns.");
 					msg.open();
 					String s="generate_3d_maze "+name+" "+floors+","+rows+","+cols;
@@ -86,6 +88,10 @@ public class GenerateMazeWindow extends DialogWindow {
 					msg.open();
 					String s="generate_3d_maze "+name+" "+floors+","+rows+","+cols+" "+algorithm;
 					view.executeCommand(s);	
+				}
+				}
+				catch(NumberFormatException e){
+					view.printMessage("Bad parameters, try again");
 				}
 				shell.close();
 			}

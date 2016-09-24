@@ -2,7 +2,6 @@ package presenter;
 
 import java.io.IOException;
 
-import algorithms.mazeGenerators.Position;
 import model.Model;
 import view.View;
 
@@ -17,8 +16,7 @@ public class Command_character_move implements Command{
 
 	@Override
 	public void doCommand(String string) throws IOException {
-		Position currentPosition = model.getCurrentPosition();
-		view.move(currentPosition);
+		view.move(model.getCurrentPosition());
 	}
 
 }

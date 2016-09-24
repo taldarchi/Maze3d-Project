@@ -215,6 +215,8 @@ public class GUI extends BaseWindow {
 		this.mazeDisplay.setGoalPosition(this.maze.getGoalPosition());
 		this.mazeDisplay.setMazeName(this.mazeName);
 		this.mazeDisplay.setMaze(this.maze);
+		this.mazeDisplay.setMazeLoaded();
+		this.mazeDisplay.setCurrentPosition(maze.getStartPosition());
 	}
 	
 	public void message(String string){
@@ -240,6 +242,7 @@ public class GUI extends BaseWindow {
 		this.crossSection = this.maze.getCrossSectionByZ(p.getZ());
 		this.mazeDisplay.setCrossSection(this.crossSection);
 		this.mazeDisplay.setCharacterPosition(p);
+		this.mazeDisplay.setCurrentPosition(p);
 	}
 
 }
