@@ -11,6 +11,7 @@
 package presenter;
 
 import model.Model;
+import utils.PropertiesFile;
 import view.View;
 
 /**
@@ -47,13 +48,15 @@ public class Command_solve implements Command {
 				view.printMessage("Maze does not exist, try again");
 			else if(model.solutionExists(model.getMazes().get(name).getMaze())){
 				view.printMessage("Solution for "+name+" already exists:");
-				view.displaySolution(model.getSolutions().get(model.getMazes().get(name)));
+				view.displaySolution(model.getSolutions().get(model.getMazes().get(name).getMaze()));
 			}
 			else{
 				String algorithm=null;
 				if(strings.length==2)
 					algorithm=strings[1];
 				model.solveMaze(name,algorithm);
+				if(PropertiesFile.getProperties().getUserInterface().equals("gui"))
+					view.displaySolution(model.getSolutions().get(model.getMazeByName(name).getMaze()));
 			}
 	}
 	}

@@ -3,9 +3,12 @@ package view;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
@@ -22,9 +25,16 @@ public class GenerateMazeWindow extends DialogWindow {
 	protected void initWidgets() {
 		
 		shell.setText("Generate maze window");
-		shell.setSize(350, 250);		
+		shell.setSize(350, 270);		
 				
 		shell.setLayout(new GridLayout(2, false));	
+		
+		Rectangle bounds = display.getPrimaryMonitor().getBounds();
+		Rectangle rect = shell.getBounds();
+		int x = bounds.x + (bounds.width - rect.width) / 2;
+		int y = bounds.y + (bounds.height - rect.height) / 2;
+		shell.setLocation(x, y);
+		
 		
 		Label lblName = new Label(shell, SWT.NONE);
 		lblName.setText("Maze name: ");
@@ -53,11 +63,18 @@ public class GenerateMazeWindow extends DialogWindow {
 		Label lblAlgorithm = new Label(shell, SWT.NONE);
 		lblAlgorithm.setText("Algorithm (optional): ");
 		
-		Text txtAlgorithm = new Text(shell, SWT.BORDER);
-		txtAlgorithm.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		Composite buttons = new Composite(shell, SWT.NONE);
+		buttons.setLayout(new GridLayout(1, false));
 		
+		Composite cmpGen = new Composite(buttons, SWT.NONE);
+		cmpGen.setLayout(new GridLayout(1, false));
+		cmpGen.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 13));
 		
-				
+		Combo cmbGenAlgo = new Combo(cmpGen, SWT.READ_ONLY | SWT.FILL);
+		String algorithms[] = {"","growing_tree_last", "growing_tree_random","simple"};
+		cmbGenAlgo.setItems(algorithms);
+		cmbGenAlgo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
 		Button btnGenerateMaze = new Button(shell, SWT.PUSH);
 		shell.setDefaultButton(btnGenerateMaze);
 		btnGenerateMaze.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2, 1));
@@ -75,7 +92,7 @@ public class GenerateMazeWindow extends DialogWindow {
 				int rows = Integer.parseInt(txtRows.getText());
 				int cols = Integer.parseInt(txtColumns.getText());
 
-				String algorithm=txtAlgorithm.getText();
+				String algorithm=cmbGenAlgo.getText();
 				
 				if(algorithm.isEmpty()){
 					msg.setMessage("Generating maze "+name+ " with "+floors+" floors, "+rows+" rows and "+cols+" columns.");

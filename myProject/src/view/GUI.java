@@ -1,5 +1,8 @@
 package view;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -7,7 +10,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
@@ -16,6 +18,7 @@ import org.eclipse.swt.widgets.MessageBox;
 
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
+import algorithms.search.Solution;
 
 public class GUI extends BaseWindow {
 
@@ -27,6 +30,8 @@ public class GUI extends BaseWindow {
 	private Maze3d maze;
 	private int[][] crossSection;
 	private Position currentPosition;
+	private TimerTask animation;
+	private Timer timing;
 
 	public GUI(MyView view) {
 		this.view=view;
@@ -40,9 +45,7 @@ public class GUI extends BaseWindow {
 		shell.setBackgroundImage(new Image(null, "images/background.jpg"));
 		
 		Composite buttons = new Composite(shell, SWT.NONE);
-		RowLayout rowLayout = new RowLayout(SWT.VERTICAL);
-		buttons.setLayout(rowLayout);
-		
+		buttons.setLayout(new GridLayout(1, false));
 		
 		//center of screen
 		Rectangle bounds = display.getPrimaryMonitor().getBounds();
@@ -53,6 +56,7 @@ public class GUI extends BaseWindow {
 	
 		
 		Button btnGenerateMaze = new Button(buttons, SWT.PUSH);
+		btnGenerateMaze.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		btnGenerateMaze.setText("Generate 3d maze");
 		
 		btnGenerateMaze.addSelectionListener(new SelectionListener() {
@@ -70,6 +74,7 @@ public class GUI extends BaseWindow {
 		});
 		
 		Button btnDisplayMaze = new Button(buttons, SWT.PUSH);
+		btnDisplayMaze.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		btnDisplayMaze.setText("Choose maze to play");
 		
 		btnDisplayMaze.addSelectionListener(new SelectionListener() {
@@ -87,6 +92,7 @@ public class GUI extends BaseWindow {
 		});
 		
 		Button btnHint = new Button(buttons, SWT.PUSH | SWT.FILL);
+		btnHint.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		btnHint.setText("Hint");
 		
 		btnHint.addSelectionListener(new SelectionListener() {
@@ -107,13 +113,14 @@ public class GUI extends BaseWindow {
 		
 		
 		Button btnSolveMaze = new Button(buttons, SWT.PUSH);
+		btnSolveMaze.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		btnSolveMaze.setText("Solve maze");
 		
 		btnSolveMaze.addSelectionListener(new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				SolveMazeWindow win = new SolveMazeWindow(view);				
+				SolveMazeWindow win = new SolveMazeWindow(view,mazeName);				
 				win.start(display);
 			}
 			
@@ -124,6 +131,7 @@ public class GUI extends BaseWindow {
 		});
 		
 		Button btnOpenProperties = new Button(buttons, SWT.PUSH);
+		btnOpenProperties.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		btnOpenProperties.setText("Load properties file");
 		
 		btnOpenProperties.addSelectionListener(new SelectionListener() {
@@ -142,14 +150,25 @@ public class GUI extends BaseWindow {
 		
 		
 		Button btnSaveMaze = new Button(buttons, SWT.PUSH);
+		btnSaveMaze.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		btnSaveMaze.setText("Save maze");
 		
 		btnSaveMaze.addSelectionListener(new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				SaveMazeWindow win = new SaveMazeWindow(view);				
-				win.start(display);
+//				SaveMazeWindow win = new SaveMazeWindow(view);				
+//				win.start(display);
+				MessageBox msg = new MessageBox(shell, SWT.OK);
+				msg.setText("Saving...");
+				String fileName=mazeName+".maz";
+				String name=mazeName;		
+				
+				msg.setMessage("Saving: "+name+" as: "+fileName);
+				String s="save_maze "+name+" "+fileName;
+				view.executeCommand(s);
+				
+				shell.close();
 			}
 			
 			@Override
@@ -159,6 +178,7 @@ public class GUI extends BaseWindow {
 		});
 		
 		Button btnLoadMaze = new Button(buttons, SWT.PUSH);
+		btnLoadMaze.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		btnLoadMaze.setText("Load maze");
 		
 		btnLoadMaze.addSelectionListener(new SelectionListener() {
@@ -176,6 +196,7 @@ public class GUI extends BaseWindow {
 		});
 		
 		Button btnExit = new Button(buttons, SWT.PUSH);
+		btnExit.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		btnExit.setText("Exit");
 		
 		btnExit.addSelectionListener(new SelectionListener() {
@@ -217,6 +238,7 @@ public class GUI extends BaseWindow {
 		this.mazeDisplay.setMazeLoaded();
 		this.mazeDisplay.setCurrentPosition(maze.getStartPosition());
 		this.mazeDisplay.setFinish();
+
 	}
 	
 	public void message(String string){
@@ -250,6 +272,32 @@ public class GUI extends BaseWindow {
 			msg.open();
 		}
 			
+	}
+	
+	public void solutionAnimation(Solution<Position> solution){
+		animation = new TimerTask() {
+			int i = 0;
+			
+			@Override
+			public void run() {
+				if (i < solution.getSolution().size()-1)
+					move(solution.getSolution().get(i).getState());
+				else {
+					display.syncExec(new Runnable() {
+
+						@Override
+						public void run() {
+							move(solution.getSolution().get(i).getState());
+						}
+						
+					});
+					cancel();
+			}
+				i++;
+			}
+		};
+		timing = new Timer();
+		timing.scheduleAtFixedRate(animation, 0, 500);
 	}
 
 }

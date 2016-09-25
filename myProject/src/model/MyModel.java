@@ -169,6 +169,7 @@ public class MyModel extends Observable implements Model{
 	@Override
 	public void solveMaze(String mazeName,String algorithm) {
 		Maze3d maze=mazes.get(mazeName).getMaze();
+		maze.setStartPosition(mazes.get(mazeName).getCurrentPosition());
 		Future<Solution<Position>> s=executor.submit(new Callable<Solution<Position>>(){
 
 			@Override

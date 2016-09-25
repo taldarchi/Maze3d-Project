@@ -13,6 +13,7 @@ package presenter;
 import java.io.IOException;
 
 import model.Model;
+import utils.PropertiesFile;
 import view.View;
 
 /**
@@ -50,7 +51,8 @@ public class Command_load_maze implements Command {
 				view.printMessage("Maze name already exists, try again");
 			else{
 				model.loadMaze(fileName, nameToSave);
-				view.updateMaze(model.getMazeByName(nameToSave).getMaze(), nameToSave);
+				if(PropertiesFile.getProperties().getUserInterface().equals("gui"))
+					view.updateMaze(model.getMazeByName(nameToSave).getMaze(), nameToSave);
 			}
 			
 

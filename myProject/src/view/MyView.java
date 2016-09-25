@@ -88,7 +88,7 @@ public class MyView extends Observable implements View {
 	 */
 	@Override
 	public void display(Maze3d maze,String name) {
-		if(PropertiesFile.getProperties().getUserInterface()=="cli")
+		if(PropertiesFile.getProperties().getUserInterface().equals("cli"))
 			out.println(maze);
 		else
 			updateMaze(maze, name);
@@ -99,7 +99,10 @@ public class MyView extends Observable implements View {
 	 */
 	@Override
 	public void displaySolution(Solution<Position> solution) {
-		out.println("Solution Path: "+solution.getSolution());
+		if(cli!=null)
+			out.println("Solution Path: "+solution.getSolution());
+		else
+			gui.solutionAnimation(solution);
 	}
 
 	/* (non-Javadoc)
@@ -151,11 +154,8 @@ public class MyView extends Observable implements View {
 		String s="save_solution_map";
 		setChanged();
 		notifyObservers(s);
-		
 		if(cli!=null)
 			out.println("Quiting...");
-		else
-			gui.message("Quiting...");
 		in.close();
 		out.flush();
 		out.close();

@@ -13,6 +13,7 @@ package presenter;
 import java.util.concurrent.ExecutionException;
 
 import model.Model;
+import utils.PropertiesFile;
 import view.View;
 
 /**
@@ -64,7 +65,8 @@ public class Command_generate_3d_maze implements Command {
 				}
 				else{
 					model.generate3dMaze(name,z,x,y,algorithm);
-					view.updateMaze(model.getMazeByName(name).getMaze(), name);
+					if(PropertiesFile.getProperties().getUserInterface().equals("gui"))
+						view.updateMaze(model.getMazeByName(name).getMaze(), name);
 				}
 				} catch (InterruptedException|ExecutionException e) {
 					e.printStackTrace();	

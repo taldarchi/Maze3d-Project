@@ -3,38 +3,50 @@ package view;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Text;
 
 public class SolveMazeWindow extends DialogWindow {
 	private MyView view;
+	private String mazeName;
 	
-	public SolveMazeWindow(MyView view) {
+	public SolveMazeWindow(MyView view , String mazeName) {
 		this.view=view;
+		this.mazeName=mazeName;
 	}
 	@Override
 	protected void initWidgets() {
 		shell.setText("Solve maze window");
-		shell.setSize(400, 125);		
+		shell.setSize(300, 170);		
 				
-		shell.setLayout(new GridLayout(2, false));	
+		shell.setLayout(new GridLayout(2, false));
 		
-		Label lblName = new Label(shell, SWT.NONE);
-		lblName.setText("Maze name: ");
-		
-		Text txtName = new Text(shell, SWT.BORDER);
-		txtName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		Rectangle bounds = display.getPrimaryMonitor().getBounds();
+		Rectangle rect = shell.getBounds();
+		int x = bounds.x + (bounds.width - rect.width) / 2;
+		int y = bounds.y + (bounds.height - rect.height) / 2;
+		shell.setLocation(x, y);
 		
 		Label lblAlgorithm = new Label(shell, SWT.NONE);
 		lblAlgorithm.setText("Algorithm (optional): ");
 		
-		Text txtAlgorithm = new Text(shell, SWT.BORDER);
-		txtAlgorithm.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		Composite buttons = new Composite(shell, SWT.NONE);
+		buttons.setLayout(new GridLayout(1, false));
 		
+		Composite cmpSolve = new Composite(buttons, SWT.NONE);
+		cmpSolve.setLayout(new GridLayout(1, false));
+		cmpSolve.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 13));
+		
+		Combo cmbSolveAlgo = new Combo(cmpSolve, SWT.READ_ONLY | SWT.FILL);
+		String algorithms[] = {"","BFS", "DFS"};
+		cmbSolveAlgo.setItems(algorithms);
+		cmbSolveAlgo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));	
 
 		Button btnSolveMaze = new Button(shell, SWT.PUSH);
 		shell.setDefaultButton(btnSolveMaze);
@@ -48,19 +60,18 @@ public class SolveMazeWindow extends DialogWindow {
 				MessageBox msg = new MessageBox(shell, SWT.OK);
 				msg.setText("Solving...");
 				//msg.setMessage("Button was clicked");
-				String name=txtName.getText();
-				String algorithm=txtAlgorithm.getText();
+				String algorithm=cmbSolveAlgo.getText();
 				
-				if(algorithm==null){
-					msg.setMessage("Solving maze "+name);
+				if(algorithm.isEmpty()){
+					msg.setMessage("Solving maze "+mazeName);
 					msg.open();
-					String s="solve "+name;
+					String s="solve "+mazeName;
 					view.executeCommand(s);
 				}
 				else{
-					msg.setMessage("Solving maze "+name+" with "+algorithm+" algorithm");
+					msg.setMessage("Solving maze "+mazeName+" with "+algorithm+" algorithm");
 					msg.open();
-					String s="solve "+name+" "+algorithm;
+					String s="solve "+mazeName+" "+algorithm;
 					view.executeCommand(s);
 				}
 

@@ -4,13 +4,15 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 public abstract class DialogWindow extends MyView{
-	protected Shell shell;	
+
+	protected Shell shell;
+	protected Display display;
 	
 	protected abstract void initWidgets();
 	
-	public void start(Display display) {		
+	public void start(Display display) {	
+		this.display=display;
 		shell = new Shell(display);
-		
 		initWidgets();
 		shell.open();		
 	}

@@ -3,6 +3,7 @@ package view;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -22,7 +23,13 @@ public class LoadMazeWindow extends DialogWindow{
 		shell.setText("Load maze window");
 		shell.setSize(350, 125);		
 				
-		shell.setLayout(new GridLayout(2, false));	
+		shell.setLayout(new GridLayout(2, false));
+		
+		Rectangle bounds = display.getPrimaryMonitor().getBounds();
+		Rectangle rect = shell.getBounds();
+		int x = bounds.x + (bounds.width - rect.width) / 2;
+		int y = bounds.y + (bounds.height - rect.height) / 2;
+		shell.setLocation(x, y);
 		
 		Label lblFileName = new Label(shell, SWT.NONE);
 		lblFileName.setText("Filename to load: ");
