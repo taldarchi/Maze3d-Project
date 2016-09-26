@@ -12,7 +12,6 @@ import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.MessageBox;
 
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
@@ -30,6 +29,7 @@ public class MazeDisplay extends Canvas {
 	private Image gold;
 	private Image arrowtothegold;
 	private Image winner;
+	private Image hintimage;
 	private Position goalPosition;
 	private Position hintPosition;
 	private boolean finish;
@@ -49,6 +49,7 @@ public class MazeDisplay extends Canvas {
 		gold=new Image(null,"images/gold.jpg");
 		arrowtothegold=new Image(null,"images/arrowtothegold.png");
 		winner=new Image(null,"images/winner.png");
+		hintimage=new Image(null,"images/hint.png");
 		finish=false;
 		hint=false;
 						
@@ -134,20 +135,23 @@ public class MazeDisplay extends Canvas {
 							if (crossSection[i][j] != 0)
 								e.gc.drawImage(wall, 0, 0, wall.getBounds().width, wall.getBounds().height, x, y, cellWidth, cellHeight);
 							else if(mazeLoaded){
-								if(maze.getGoalPosition().equals(new Position(currentPosition.getZ(),i,j))){
+								Position current=new Position(currentPosition.getZ(),i,j);
+								if(maze.getGoalPosition().equals(current)){
 									e.gc.drawImage(gold, 0, 0, gold.getBounds().width, gold.getBounds().height, x, y, cellWidth, cellHeight);
 									finish=true;
 								}
 								Position temp=new Position(maze.getGoalPosition().getZ()-2,maze.getGoalPosition().getX(),maze.getGoalPosition().getY());	
-								if(hint && hintPosition.equals(new Position(currentPosition.getZ(),i,j)))
-										e.gc.drawImage(gold, 0, 0, gold.getBounds().width, gold.getBounds().height, x, y, cellWidth, cellHeight);
-								if(temp.equals(new Position(currentPosition.getZ(),i,j)))
+								if(hint && hintPosition.equals(current)){
+									e.gc.drawImage(hintimage, 0, 0, hintimage.getBounds().width, hintimage.getBounds().height, x, y, cellWidth, cellHeight);
+									hint=false;
+								}
+								if(temp.equals(current))
 									e.gc.drawImage(arrowtothegold, 0, 0, arrowtothegold.getBounds().width, arrowtothegold.getBounds().height, x, y, cellWidth, cellHeight);
-								else if(Arrays.asList(maze.getPossibleMoves(new Position(currentPosition.getZ(),i,j))).contains("Up") && Arrays.asList(maze.getPossibleMoves(new Position(currentPosition.getZ(),i,j))).contains("Down"))
+								else if(Arrays.asList(maze.getPossibleMoves(current)).contains("Up") && Arrays.asList(maze.getPossibleMoves(current)).contains("Down"))
 									e.gc.drawImage(arrowupanddown, 0, 0, arrowupanddown.getBounds().width, arrowupanddown.getBounds().height, x, y, cellWidth, cellHeight);
-								else if(Arrays.asList(maze.getPossibleMoves(new Position(currentPosition.getZ(),i,j))).contains("Up") && !Arrays.asList(maze.getPossibleMoves(new Position(currentPosition.getZ(),i,j))).contains("Down"))
+								else if(Arrays.asList(maze.getPossibleMoves(current)).contains("Up") && !Arrays.asList(maze.getPossibleMoves(current)).contains("Down"))
 									e.gc.drawImage(arrowup, 0, 0, arrowup.getBounds().width, arrowup.getBounds().height, x, y, cellWidth, cellHeight);
-								else if(!Arrays.asList(maze.getPossibleMoves(new Position(currentPosition.getZ(),i,j))).contains("Up") && Arrays.asList(maze.getPossibleMoves(new Position(currentPosition.getZ(),i,j))).contains("Down")&&!maze.getGoalPosition().equals(new Position(currentPosition.getZ(),i,j)))
+								else if(!Arrays.asList(maze.getPossibleMoves(current)).contains("Up") && Arrays.asList(maze.getPossibleMoves(current)).contains("Down")&&!maze.getGoalPosition().equals(current))
 									e.gc.drawImage(arrowdown, 0, 0, arrowdown.getBounds().width, arrowdown.getBounds().height, x, y, cellWidth, cellHeight);
 							}
 						}
@@ -206,7 +210,7 @@ public class MazeDisplay extends Canvas {
 		this.finish = false;
 	}
 
-	public void drawHint(Position hintPosition){
+	public void setHint(Position hintPosition){
 		this.hint = true;
 		this.hintPosition = hintPosition;
 		redrawObject();

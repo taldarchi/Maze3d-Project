@@ -88,7 +88,7 @@ public interface View {
 	
 	public void updateMaze(Maze3d maze, String name);
 	
-	public void setCurrentPositionInGui(Position p);
+	public void setHintPositionInGui(Position p);
 
 	public void move(Position currentPosition);
 

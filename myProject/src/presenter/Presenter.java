@@ -72,7 +72,7 @@ public class Presenter implements Observer{
 		}
 		if(o==model){
 			if(arg instanceof Position)
-				view.setCurrentPositionInGui((Position)arg);
+				view.setHintPositionInGui((Position)arg);
 			else if(arg.equals("character_move")){
 				Command c=new Command_character_move(view, model);
 				try {

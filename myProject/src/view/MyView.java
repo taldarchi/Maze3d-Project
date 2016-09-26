@@ -216,9 +216,8 @@ public class MyView extends Observable implements View {
 		this.gui.displayCurrentMaze(maze, name);
 	}
 	
-	public void setCurrentPositionInGui(Position p){
-		this.gui.setCurrentPosition(p);
-		this.gui.setCharacterPositionInMazeDisplay(p);
+	public void setHintPositionInGui(Position p){
+		this.gui.setHintPositionMazeDisplay(p);
 	}
 
 	@Override

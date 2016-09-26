@@ -20,6 +20,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Observable;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -40,6 +41,7 @@ import algorithms.search.BFS;
 import algorithms.search.CommonSearcher;
 import algorithms.search.DFS;
 import algorithms.search.Solution;
+import algorithms.search.State;
 import io.MyCompressorOutputStream;
 import io.MyDecompressorInputStream;
 import utils.PropertiesFile;
@@ -110,10 +112,12 @@ public class MyModel extends Observable implements Model{
 		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
 		}
-		String mazeName=name;
-		String message = String.format("Maze %s is ready", mazeName);
-		setChanged();
-		notifyObservers(message);
+		if(PropertiesFile.getProperties().getUserInterface().equals("cli")){
+			String mazeName=name;
+			String message = String.format("Maze %s is ready", mazeName);
+			setChanged();
+			notifyObservers(message);
+		}
 	}
 
 	/* (non-Javadoc)
@@ -208,9 +212,11 @@ public class MyModel extends Observable implements Model{
 		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
 		}
- 	    String message = String.format("Solution for %s is ready", mazeName);
-		setChanged();
-		notifyObservers(message);
+		if(PropertiesFile.getProperties().getUserInterface().equals("cli")){
+			String message = String.format("Solution for %s is ready", mazeName);
+			setChanged();
+			notifyObservers(message);
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -354,7 +360,10 @@ public class MyModel extends Observable implements Model{
 	}
 	
 	public void hint(String name){
-		Position pos=getSolutions().get(getMazeByName(name)).getSolution().get(0).getState();
+		Maze3d maze=this.mazes.get(name).getMaze();
+		List<State<Position>> sol=this.solutions.get(maze).getSolution();
+		State<Position> s=sol.get(0);
+		Position pos=s.getState();
 		setChanged();
 		notifyObservers(pos);
 	}

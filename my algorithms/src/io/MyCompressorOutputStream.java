@@ -30,11 +30,11 @@ public class MyCompressorOutputStream extends OutputStream {
 				else
 					break;
 			}
-			while(counter>127){
-				write(127);
-				write(x);
-				counter=counter-127;
-			}
+		while(counter>127){
+			write(127);
+			write(x);
+			counter=counter-127;
+		}
 			write(counter);
 			write(x);
 			close();

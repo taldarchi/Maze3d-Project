@@ -157,18 +157,18 @@ public class GUI extends BaseWindow {
 			
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-//				SaveMazeWindow win = new SaveMazeWindow(view);				
-//				win.start(display);
 				MessageBox msg = new MessageBox(shell, SWT.OK);
 				msg.setText("Saving...");
 				String fileName=mazeName+".maz";
 				String name=mazeName;		
-				
-				msg.setMessage("Saving: "+name+" as: "+fileName);
-				String s="save_maze "+name+" "+fileName;
-				view.executeCommand(s);
-				
-				shell.close();
+				if (mazeName == null)
+					view.printMessage("Generate/Load a maze first!");
+				else{
+					String s="save_maze "+name+" "+fileName;
+					view.executeCommand(s);
+					msg.setMessage("Saved "+name+" as: "+fileName);
+					msg.open();
+				}
 			}
 			
 			@Override
@@ -299,5 +299,8 @@ public class GUI extends BaseWindow {
 		timing = new Timer();
 		timing.scheduleAtFixedRate(animation, 0, 500);
 	}
-
+	public void setHintPositionMazeDisplay(Position pos){
+		this.mazeDisplay.setHint(pos);
+	}
+	
 }

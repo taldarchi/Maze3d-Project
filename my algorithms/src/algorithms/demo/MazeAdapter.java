@@ -67,7 +67,7 @@ public class MazeAdapter implements Searchable<Position> {
 				} catch (CloneNotSupportedException e) {
 					e.printStackTrace();
 				}
-				pos.setZ(s.getState().getZ()+2);
+				pos.setZ(s.getState().getZ()+1);
 				pos.setX(s.getState().getX());
 				pos.setY(s.getState().getY());
 				t.setCameFromDirection("Up");
@@ -87,7 +87,7 @@ public class MazeAdapter implements Searchable<Position> {
 				} catch (CloneNotSupportedException e) {
 					e.printStackTrace();
 				}
-				pos.setZ(s.getState().getZ()-2);
+				pos.setZ(s.getState().getZ()-1);
 				pos.setX(s.getState().getX());
 				pos.setY(s.getState().getY());
 				t.setCameFromDirection("Down");
@@ -109,7 +109,7 @@ public class MazeAdapter implements Searchable<Position> {
 				}
 				pos.setZ(s.getState().getZ());
 				pos.setX(s.getState().getX());
-				pos.setY(s.getState().getY()-2);
+				pos.setY(s.getState().getY()-1);
 				t.setCameFromDirection("Left");
 				t.setState(pos);
 				try {
@@ -129,7 +129,7 @@ public class MazeAdapter implements Searchable<Position> {
 				}
 				pos.setZ(s.getState().getZ());
 				pos.setX(s.getState().getX());
-				pos.setY(s.getState().getY()+2);
+				pos.setY(s.getState().getY()+1);
 				t.setCameFromDirection("Right");
 				t.setState(pos);
 				try {
@@ -148,7 +148,7 @@ public class MazeAdapter implements Searchable<Position> {
 					e.printStackTrace();
 				}
 				pos.setZ(s.getState().getZ());
-				pos.setX(s.getState().getX()+2);
+				pos.setX(s.getState().getX()+1);
 				pos.setY(s.getState().getY());
 				t.setCameFromDirection("Forward");
 				t.setState(pos);
@@ -168,7 +168,7 @@ public class MazeAdapter implements Searchable<Position> {
 					e.printStackTrace();
 				}
 				pos.setZ(s.getState().getZ());
-				pos.setX(s.getState().getX()-2);
+				pos.setX(s.getState().getX()-1);
 				pos.setY(s.getState().getY());
 				t.setCameFromDirection("Backwards");
 				t.setState(pos);

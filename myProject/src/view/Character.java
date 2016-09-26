@@ -26,4 +26,8 @@ public class Character {
 		gc.drawImage(img, 0, 0, img.getBounds().width, img.getBounds().height, x * pos.getY(), y * pos.getX(), x, y);
 	}
 
+	public Image getImg() {
+		return img;
+	}
+
 }
