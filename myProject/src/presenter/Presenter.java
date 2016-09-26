@@ -12,11 +12,23 @@ import model.MyModel;
 import view.MyView;
 import view.View;
 
+/**
+ * The Class Presenter.
+ */
 public class Presenter implements Observer{
 	
+	/** The view. */
 	private View view;
+	
+	/** The model. */
 	private Model model;
 	
+	/**
+	 * Instantiates a new presenter.
+	 *
+	 * @param view the view
+	 * @param model the model
+	 */
 	public Presenter(MyView view, MyModel model){
 	      this.view=view;
 	      this.model=model;
@@ -42,6 +54,9 @@ public class Presenter implements Observer{
 		  view.setMap(map);
 	}
 
+	/* (non-Javadoc)
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		if(o==view){

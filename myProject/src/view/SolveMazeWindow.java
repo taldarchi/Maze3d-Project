@@ -12,14 +12,31 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 
+/**
+ * The Class SolveMazeWindow.
+ */
 public class SolveMazeWindow extends DialogWindow {
+	
+	/** The view. */
 	private MyView view;
+	
+	/** The maze name. */
 	private String mazeName;
 	
+	/**
+	 * Instantiates a new solve maze window.
+	 *
+	 * @param view the view
+	 * @param mazeName the maze name
+	 */
 	public SolveMazeWindow(MyView view , String mazeName) {
 		this.view=view;
 		this.mazeName=mazeName;
 	}
+	
+	/* (non-Javadoc)
+	 * @see view.DialogWindow#initWidgets()
+	 */
 	@Override
 	protected void initWidgets() {
 		shell.setText("Solve maze window");

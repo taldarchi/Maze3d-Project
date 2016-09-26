@@ -11,13 +11,26 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 
+/**
+ * The Class LoadMazeWindow.
+ */
 public class LoadMazeWindow extends DialogWindow{
 
+	/** The view. */
 	private MyView view;
 	
+	/**
+	 * Instantiates a new load maze window.
+	 *
+	 * @param view the view
+	 */
 	public LoadMazeWindow(MyView view){
 		this.view=view;
 	}
+	
+	/* (non-Javadoc)
+	 * @see view.DialogWindow#initWidgets()
+	 */
 	@Override
 	protected void initWidgets() {
 		shell.setText("Load maze window");

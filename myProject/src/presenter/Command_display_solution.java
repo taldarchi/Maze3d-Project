@@ -15,14 +15,31 @@ import algorithms.search.Solution;
 import model.Model;
 import view.View;
 
+/**
+ * The Class Command_display_solution.
+ */
 public class Command_display_solution implements Command {
+	
+	/** The view. */
 	private View view;
+	
+	/** The model. */
 	private Model model;
+	
+	/**
+	 * Instantiates a new command display solution.
+	 *
+	 * @param view the view
+	 * @param model the model
+	 */
 	public Command_display_solution(View view, Model model){
 		this.view=view;
 		this.model=model;
 	}
 
+	/* (non-Javadoc)
+	 * @see presenter.Command#doCommand(java.lang.String)
+	 */
 	@Override
 	public void doCommand(String string) {
 		//check for errors first

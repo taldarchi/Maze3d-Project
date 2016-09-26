@@ -3,12 +3,25 @@ package view;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+/**
+ * The Class BaseWindow.
+ */
 public abstract class BaseWindow {
-	protected Display display;
-	protected Shell shell;	
 	
+	/** The display. */
+	protected Display display;
+	
+	/** The shell. */
+	protected Shell shell;
+	
+	/**
+	 * Inits the widgets.
+	 */
 	protected abstract void initWidgets();
 	
+	/**
+	 * Start.
+	 */
 	public void start() {
 		display = new Display();
 		shell = new Shell(display);

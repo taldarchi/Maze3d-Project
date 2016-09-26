@@ -20,29 +20,53 @@ import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
 
+/**
+ * The Class GUI.
+ */
 public class GUI extends BaseWindow {
 
+	/** The maze display. */
 	private MazeDisplay mazeDisplay;
-	private Character character;
+
+	/** The view. */
 	private MyView view;
+	
+	/** The maze name. */
 	private String mazeName;
-	private boolean hint;
+
+	/** The maze. */
 	private Maze3d maze;
+	
+	/** The cross section. */
 	private int[][] crossSection;
+	
+	/** The current position. */
 	private Position currentPosition;
+	
+	/** The animation. */
 	private TimerTask animation;
+	
+	/** The timing. */
 	private Timer timing;
 
+	/**
+	 * Instantiates a new gui.
+	 *
+	 * @param view the view
+	 */
 	public GUI(MyView view) {
 		this.view=view;
 	}
 
+	/* (non-Javadoc)
+	 * @see view.BaseWindow#initWidgets()
+	 */
 	@Override
 	protected void initWidgets() {
 		GridLayout grid = new GridLayout(2, false);
 		shell.setLayout(grid);
 		shell.setBackgroundMode(SWT.INHERIT_DEFAULT);
-		shell.setBackgroundImage(new Image(null, "images/background.jpg"));
+		shell.setBackgroundImage(new Image(null, "resources/images/background.jpg"));
 		
 		Composite buttons = new Composite(shell, SWT.NONE);
 		buttons.setLayout(new GridLayout(1, false));
@@ -101,10 +125,8 @@ public class GUI extends BaseWindow {
 			public void widgetSelected(SelectionEvent arg0) {
 				if (mazeName == null)
 					view.printMessage("Generate/Load a maze first!");
-				else {
-					hint = true;
+				else 
 					view.executeCommand("hint " + mazeName);
-				}
 			}
 			
 			@Override
@@ -226,13 +248,18 @@ public class GUI extends BaseWindow {
 		mazeDisplay.setFocus();
 	}
 	
+	/**
+	 * Display current maze.
+	 *
+	 * @param maze the maze
+	 * @param mazeName the maze name
+	 */
 	public void displayCurrentMaze(Maze3d maze, String mazeName){
 		this.mazeName=mazeName;
 		this.maze=maze;
 		this.crossSection=maze.getCrossSectionByZ(0);
 		this.mazeDisplay.setCharacterPosition(maze.getStartPosition());
 		this.mazeDisplay.setCrossSection(this.crossSection);
-		this.mazeDisplay.setGoalPosition(this.maze.getGoalPosition());
 		this.mazeDisplay.setMazeName(this.mazeName);
 		this.mazeDisplay.setMaze(this.maze);
 		this.mazeDisplay.setMazeLoaded();
@@ -241,6 +268,11 @@ public class GUI extends BaseWindow {
 
 	}
 	
+	/**
+	 * Message.
+	 *
+	 * @param string the string
+	 */
 	public void message(String string){
 		MessageBox msg = new MessageBox(shell, SWT.OK);
 		msg.setText("Message");
@@ -248,18 +280,38 @@ public class GUI extends BaseWindow {
 		msg.open();
 	}
 
+	/**
+	 * Gets the current position.
+	 *
+	 * @return the current position
+	 */
 	public Position getCurrentPosition() {
 		return currentPosition;
 	}
 
+	/**
+	 * Sets the current position.
+	 *
+	 * @param currentPosition the new current position
+	 */
 	public void setCurrentPosition(Position currentPosition) {
 		this.currentPosition = currentPosition;
 	}
 	
+	/**
+	 * Sets the character position in maze display.
+	 *
+	 * @param p the new character position in maze display
+	 */
 	public void setCharacterPositionInMazeDisplay(Position p){
 		this.mazeDisplay.setCharacterPosition(p);
 	}
 	
+	/**
+	 * Move.
+	 *
+	 * @param p the p
+	 */
 	public void move(Position p){
 		this.crossSection = this.maze.getCrossSectionByZ(p.getZ());
 		this.mazeDisplay.setCrossSection(this.crossSection);
@@ -274,6 +326,11 @@ public class GUI extends BaseWindow {
 			
 	}
 	
+	/**
+	 * Solution animation.
+	 *
+	 * @param solution the solution
+	 */
 	public void solutionAnimation(Solution<Position> solution){
 		animation = new TimerTask() {
 			int i = 0;
@@ -299,6 +356,12 @@ public class GUI extends BaseWindow {
 		timing = new Timer();
 		timing.scheduleAtFixedRate(animation, 0, 500);
 	}
+	
+	/**
+	 * Sets the hint position maze display.
+	 *
+	 * @param pos the new hint position maze display
+	 */
 	public void setHintPositionMazeDisplay(Position pos){
 		this.mazeDisplay.setHint(pos);
 	}

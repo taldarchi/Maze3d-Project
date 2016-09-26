@@ -51,9 +51,7 @@ import utils.PropertiesFile;
  */
 public class MyModel extends Observable implements Model{
 	
-	/**
-	 *
-	 */
+	/** The executor. */
 	private ExecutorService executor = Executors.newFixedThreadPool(PropertiesFile.getProperties().getThreadsNum());
 	
 	/** The mazes. */
@@ -62,12 +60,16 @@ public class MyModel extends Observable implements Model{
 	/** The solutions. */
 	private HashMap<Maze3d, Solution<Position>> solutions=new HashMap<Maze3d,Solution<Position>>();
 	
+	/** The wanted position. */
 	private Position wantedPosition;
 	
+	/** The current maze. */
 	private Maze3d currentMaze;
 	
+	/** The current position. */
 	private Position currentPosition;
 	
+	/** The simple algorithm. */
 	private boolean simpleAlgorithm;
 	
 
@@ -128,7 +130,7 @@ public class MyModel extends Observable implements Model{
 	@Override
 	public void saveMaze(String name, String fileName) throws IOException {
 		Maze3d maze=mazes.get(name).getMaze();
-		OutputStream out=new MyCompressorOutputStream(new FileOutputStream(fileName));
+		OutputStream out=new MyCompressorOutputStream(new FileOutputStream("resources/mazes/"+fileName));
 		try{
 		out.write(maze.toByteArray());
 		}catch(NullPointerException e){
@@ -150,7 +152,7 @@ public class MyModel extends Observable implements Model{
 	public Maze3d loadMaze(String fileName, String nameToSave) throws IOException
 	{
 		try{
-		InputStream in=new MyDecompressorInputStream(new FileInputStream(fileName));
+		InputStream in=new MyDecompressorInputStream(new FileInputStream("resources/mazes/"+fileName));
 		byte b[]=new byte[1000000];
 		in.read(b);
 		in.close();
@@ -259,15 +261,22 @@ public class MyModel extends Observable implements Model{
 	public HashMap<Maze3d, Solution<Position>> getSolutions() {
 		return solutions;
 	}
+	
+	/* (non-Javadoc)
+	 * @see model.Model#solutionExists(algorithms.mazeGenerators.Maze3d)
+	 */
 	@Override
 	public boolean solutionExists(Maze3d maze){
 		return solutions.containsKey(maze);
 	}
 
+	/* (non-Javadoc)
+	 * @see model.Model#saveSolutionMap()
+	 */
 	@Override
 	public void saveSolutionMap(){
 		try {
-	        File file = new File("map.zip");
+	        File file = new File("resources/solutionmaps/map.zip");
 	        ObjectOutputStream output;
 			output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
 	        output.writeObject(solutions);
@@ -280,13 +289,16 @@ public class MyModel extends Observable implements Model{
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see model.Model#loadSolutionMap()
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void loadSolutionMap() {
 		try {
 	        File file = new File("map.zip");
 	        ObjectInputStream input;
-			input = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)));
+			input = new ObjectInputStream(new GZIPInputStream(new FileInputStream("resources/solutionmaps/"+file)));
 	        Object readObject = input.readObject();
 	        input.close();
 	        if(!(readObject instanceof HashMap)) throw new IOException("Data is not a hashmap");
@@ -299,11 +311,18 @@ public class MyModel extends Observable implements Model{
 
 		
 	}
+	
+	/* (non-Javadoc)
+	 * @see model.Model#getMazes()
+	 */
 	@Override
 	public HashMap<String, PlayedMaze> getMazes() {
 		return mazes;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -312,6 +331,9 @@ public class MyModel extends Observable implements Model{
 		return result;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -330,6 +352,11 @@ public class MyModel extends Observable implements Model{
 	}
 	
 
+	/**
+	 * Generate from properties.
+	 *
+	 * @return the maze 3 d generator
+	 */
 	public Maze3dGenerator generateFromProperties(){
 		switch(PropertiesFile.getProperties().getGeneratorAlgorithm()){
 		case "simple":
@@ -342,6 +369,12 @@ public class MyModel extends Observable implements Model{
 	}
 		return null;
 }
+	
+	/**
+	 * Solve from properties.
+	 *
+	 * @return the common searcher
+	 */
 	public CommonSearcher<Position> solveFromProperties(){
 		switch(PropertiesFile.getProperties().getSearchAlgorithm()){
 		case "bfs":
@@ -354,11 +387,19 @@ public class MyModel extends Observable implements Model{
 		return null;
 	}
 	
+	/**
+	 * Sets the maze to play.
+	 *
+	 * @param name the new maze to play
+	 */
 	public void setMazeToPlay(String name){
 		this.currentMaze=this.getMazeByName(name).getMaze();
 		this.currentPosition=this.getMazeByName(name).getCurrentPosition();
 	}
 	
+	/* (non-Javadoc)
+	 * @see model.Model#hint(java.lang.String)
+	 */
 	public void hint(String name){
 		Maze3d maze=this.mazes.get(name).getMaze();
 		List<State<Position>> sol=this.solutions.get(maze).getSolution();
@@ -368,6 +409,9 @@ public class MyModel extends Observable implements Model{
 		notifyObservers(pos);
 	}
 	
+	/* (non-Javadoc)
+	 * @see model.Model#up(java.lang.String)
+	 */
 	public void up(String string){
 		setMazeToPlay(string);
 		if(simpleAlgorithm)
@@ -383,6 +427,9 @@ public class MyModel extends Observable implements Model{
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see model.Model#down(java.lang.String)
+	 */
 	public void down(String string){
 		setMazeToPlay(string);
 		if(simpleAlgorithm)
@@ -398,6 +445,9 @@ public class MyModel extends Observable implements Model{
 		}
 	}	
 	
+	/* (non-Javadoc)
+	 * @see model.Model#forward(java.lang.String)
+	 */
 	public void forward(String string){
 		setMazeToPlay(string);
 		this.wantedPosition = new Position(this.currentPosition.getZ(), this.currentPosition.getX()+1, this.currentPosition.getY());
@@ -410,6 +460,9 @@ public class MyModel extends Observable implements Model{
 		}
 	}	
 	
+	/* (non-Javadoc)
+	 * @see model.Model#backwards(java.lang.String)
+	 */
 	public void backwards(String string){
 		setMazeToPlay(string);
 		this.wantedPosition = new Position(this.currentPosition.getZ(), this.currentPosition.getX()-1, this.currentPosition.getY());
@@ -422,6 +475,9 @@ public class MyModel extends Observable implements Model{
 		}
 	}	
 	
+	/* (non-Javadoc)
+	 * @see model.Model#right(java.lang.String)
+	 */
 	public void right(String string){
 		setMazeToPlay(string);
 		this.wantedPosition = new Position(this.currentPosition.getZ(), this.currentPosition.getX(), this.currentPosition.getY()+1);
@@ -436,6 +492,9 @@ public class MyModel extends Observable implements Model{
 	
 
 
+	/* (non-Javadoc)
+	 * @see model.Model#left(java.lang.String)
+	 */
 	public void left(String string){
 		setMazeToPlay(string);
 		this.wantedPosition = new Position(this.currentPosition.getZ(), this.currentPosition.getX(), this.currentPosition.getY()-1);
@@ -448,10 +507,16 @@ public class MyModel extends Observable implements Model{
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see model.Model#getCurrentPosition()
+	 */
 	public Position getCurrentPosition() {
 		return currentPosition;
 	}
 	
+	/* (non-Javadoc)
+	 * @see model.Model#readProperties(java.lang.String)
+	 */
 	public void readProperties(String filename){
 		try {
 			PropertiesFile.readProperties(filename);

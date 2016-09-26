@@ -10,12 +10,26 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+/**
+ * The Class PropertiesWindow.
+ */
 public class PropertiesWindow extends DialogWindow{
+	
+	/** The view. */
 	private MyView view;
 	
+	/**
+	 * Instantiates a new properties window.
+	 *
+	 * @param view the view
+	 */
 	public PropertiesWindow(MyView view) {
 		this.view=view;
 	}
+	
+	/* (non-Javadoc)
+	 * @see view.DialogWindow#initWidgets()
+	 */
 	@Override
 	protected void initWidgets() {
 		shell.setText("Properties window");

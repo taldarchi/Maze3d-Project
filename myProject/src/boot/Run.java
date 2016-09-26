@@ -30,8 +30,8 @@ public class Run {
 	 *
 	 * @param args the arguments
 	 * @throws IOException Signals that an I/O exception has occurred.
-	 * @throws ExecutionException 
-	 * @throws InterruptedException 
+	 * @throws InterruptedException the interrupted exception
+	 * @throws ExecutionException the execution exception
 	 */
 	public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
 		//PropertiesFile.writeProperties();

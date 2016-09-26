@@ -40,8 +40,8 @@ public interface Model{
 	 * @param x the x
 	 * @param y the y
 	 * @param algorithm the algorithm
-	 * @throws ExecutionException 
-	 * @throws InterruptedException 
+	 * @throws InterruptedException the interrupted exception
+	 * @throws ExecutionException the execution exception
 	 */
 	public void generate3dMaze(String name, int z, int x, int y,String algorithm) throws InterruptedException, ExecutionException;
 	
@@ -49,7 +49,6 @@ public interface Model{
 	 * Solve maze.
 	 *
 	 * @param mazeName the maze name
-	 * @param algorithm 
 	 * @param algorithm the algorithm
 	 */
 	public void solveMaze(String mazeName, String algorithm);
@@ -86,24 +85,92 @@ public interface Model{
 	 */
 	public PlayedMaze getMazeByName(String name);
 
+	/**
+	 * Solution exists.
+	 *
+	 * @param maze the maze
+	 * @return true, if successful
+	 */
 	boolean solutionExists(Maze3d maze);
 	
+	/**
+	 * Save solution map.
+	 */
 	public void saveSolutionMap();
+	
+	/**
+	 * Load solution map.
+	 */
 	public void loadSolutionMap();
 
+	/**
+	 * Gets the mazes.
+	 *
+	 * @return the mazes
+	 */
 	public HashMap<String, PlayedMaze> getMazes();
 
+	/**
+	 * Forward.
+	 *
+	 * @param string the string
+	 */
 	public void forward(String string);
+	
+	/**
+	 * Backwards.
+	 *
+	 * @param string the string
+	 */
 	public void backwards(String string);
+	
+	/**
+	 * Up.
+	 *
+	 * @param string the string
+	 */
 	public void up(String string);
+	
+	/**
+	 * Down.
+	 *
+	 * @param string the string
+	 */
 	public void down(String string);
+	
+	/**
+	 * Left.
+	 *
+	 * @param string the string
+	 */
 	public void left(String string);
+	
+	/**
+	 * Right.
+	 *
+	 * @param string the string
+	 */
 	public void right(String string);
 	
+	/**
+	 * Hint.
+	 *
+	 * @param name the name
+	 */
 	public void hint(String name);
 
+	/**
+	 * Gets the current position.
+	 *
+	 * @return the current position
+	 */
 	public Position getCurrentPosition();
 	
+	/**
+	 * Read properties.
+	 *
+	 * @param filename the filename
+	 */
 	public void readProperties(String filename);
 
 

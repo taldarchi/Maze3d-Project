@@ -13,14 +13,26 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 
+/**
+ * The Class GenerateMazeWindow.
+ */
 public class GenerateMazeWindow extends DialogWindow {
 	
+	/** The view. */
 	private MyView view;
 	
+	/**
+	 * Instantiates a new generate maze window.
+	 *
+	 * @param view the view
+	 */
 	public GenerateMazeWindow(MyView view) {
 		this.view=view;
 	}
 
+	/* (non-Javadoc)
+	 * @see view.DialogWindow#initWidgets()
+	 */
 	@Override
 	protected void initWidgets() {
 		
