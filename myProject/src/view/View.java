@@ -55,6 +55,7 @@ public interface View {
 	 * Display.
 	 *
 	 * @param maze the maze
+	 * @param name the name
 	 */
 	public void display(Maze3d maze,String name);
 	
@@ -86,10 +87,26 @@ public interface View {
 	 */
 	public String getLine();
 	
+	/**
+	 * Update maze.
+	 *
+	 * @param maze the maze
+	 * @param name the name
+	 */
 	public void updateMaze(Maze3d maze, String name);
 	
+	/**
+	 * Sets the hint position in gui.
+	 *
+	 * @param p the new hint position in gui
+	 */
 	public void setHintPositionInGui(Position p);
 
+	/**
+	 * Move.
+	 *
+	 * @param currentPosition the current position
+	 */
 	public void move(Position currentPosition);
 
 

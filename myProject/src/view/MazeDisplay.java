@@ -105,40 +105,60 @@ public class MazeDisplay extends Canvas {
 			public void keyPressed(KeyEvent e) {
 				String command = null;
 				if(mazeName != null){
+//					Position move = null;
+//					String direction=null;
 					switch (e.keyCode) {
 					case SWT.ARROW_RIGHT:
 						command="right "+mazeName;
 						view.executeCommand(command);
+//						move=new Position(currentPosition.getZ(),currentPosition.getX(), currentPosition.getY()+1);
+//						direction="Right";
 						break;
 					
 					case SWT.ARROW_LEFT:	
 						command="left "+mazeName;
 						view.executeCommand(command);
+//						move=new Position(currentPosition.getZ(),currentPosition.getX(), currentPosition.getY()-1);
+//						direction="Left";
 						break;
 						
 					case SWT.ARROW_UP:			
 						command="backwards "+mazeName;
 						view.executeCommand(command);
+//						move=new Position(currentPosition.getZ(),currentPosition.getX()-1, currentPosition.getY());
+//						direction="Backwards";
 						break;
 						
 					case SWT.ARROW_DOWN:			
 						command="forward "+mazeName;
 						view.executeCommand(command);
+//						move=new Position(currentPosition.getZ(),currentPosition.getX()+1, currentPosition.getY());
+//						direction="Forward";
 						break;
 						
 					case SWT.PAGE_UP:		
 						command="up "+mazeName;
 						view.executeCommand(command);
+//						move=new Position(currentPosition.getZ()+2,currentPosition.getX(), currentPosition.getY());
+//						direction="Up";
 						break;
 						
 					case SWT.PAGE_DOWN:		
 						command="down "+mazeName;
 						view.executeCommand(command);
-						break;
+//						move=new Position(currentPosition.getZ()-2,currentPosition.getX(), currentPosition.getY());
+//						direction="Down";
+						break;	
 						
 					default: 
 						break;
 					}
+//					if((Arrays.asList(maze.getPossibleMoves(currentPosition)).contains(direction))){
+//						setCharacterPosition(move);
+//						setCurrentPosition(move);
+//						setCrossSection(maze.getCrossSectionByZ(move.getZ()));
+//					}
+					
 				redraw();
 				}
 			}
@@ -163,48 +183,53 @@ public class MazeDisplay extends Canvas {
 			
 			@Override
 			public void paintControl(PaintEvent e) {
-					int x,y;
 					int width=getSize().x;
 					int height=getSize().y;
 					int cellWidth=width / crossSection[0].length;
 					int cellHeight= height / crossSection.length;
 					
 				if(!finish){
-					for (int i = 0; i < crossSection.length; i++) {
-						for (int j = 0; j < crossSection[i].length; j++) {
-							x = j * cellWidth;
-							y = i * cellHeight;
-							if (crossSection[i][j] != 0)
-								e.gc.drawImage(wall, 0, 0, wall.getBounds().width, wall.getBounds().height, x, y, cellWidth, cellHeight);
-							else if(mazeLoaded){
-								Position current=new Position(currentPosition.getZ(),i,j);
-								if(maze.getGoalPosition().equals(current)){
-									e.gc.drawImage(gold, 0, 0, gold.getBounds().width, gold.getBounds().height, x, y, cellWidth, cellHeight);
-									finish=true;
-								}
-								Position temp=new Position(maze.getGoalPosition().getZ()-2,maze.getGoalPosition().getX(),maze.getGoalPosition().getY());	
-								if(hint && hintPosition.equals(current)){
-									e.gc.drawImage(hintimage, 0, 0, hintimage.getBounds().width, hintimage.getBounds().height, x, y, cellWidth, cellHeight);
-									hint=false;
-								}
-								if(temp.equals(current))
-									e.gc.drawImage(arrowtothegold, 0, 0, arrowtothegold.getBounds().width, arrowtothegold.getBounds().height, x, y, cellWidth, cellHeight);
-								else if(Arrays.asList(maze.getPossibleMoves(current)).contains("Up") && Arrays.asList(maze.getPossibleMoves(current)).contains("Down"))
-									e.gc.drawImage(arrowupanddown, 0, 0, arrowupanddown.getBounds().width, arrowupanddown.getBounds().height, x, y, cellWidth, cellHeight);
-								else if(Arrays.asList(maze.getPossibleMoves(current)).contains("Up") && !Arrays.asList(maze.getPossibleMoves(current)).contains("Down"))
-									e.gc.drawImage(arrowup, 0, 0, arrowup.getBounds().width, arrowup.getBounds().height, x, y, cellWidth, cellHeight);
-								else if(!Arrays.asList(maze.getPossibleMoves(current)).contains("Up") && Arrays.asList(maze.getPossibleMoves(current)).contains("Down")&&!maze.getGoalPosition().equals(current))
-									e.gc.drawImage(arrowdown, 0, 0, arrowdown.getBounds().width, arrowdown.getBounds().height, x, y, cellWidth, cellHeight);
-							}
-						}
-					}
-						character.draw(cellWidth, cellHeight, e.gc);
+					floorDraw(e,cellWidth,cellHeight);	
+					character.draw(cellWidth, cellHeight, e.gc);
 				}
 				else{
 					e.gc.drawImage(winner, 0, 0, winner.getBounds().width, winner.getBounds().height,1, 1, 1250, 584);
 				}
 			}
 		});
+	}
+	
+
+	public void floorDraw(PaintEvent e,int cellWidth,int cellHeight){
+		int x,y;
+		for (int i = 0; i < crossSection.length; i++) {
+			for (int j = 0; j < crossSection[i].length; j++) {
+				x = j * cellWidth;
+				y = i * cellHeight;
+				if (crossSection[i][j] != 0)
+					e.gc.drawImage(wall, 0, 0, wall.getBounds().width, wall.getBounds().height, x, y, cellWidth, cellHeight);
+				else if(mazeLoaded){
+					Position current=new Position(currentPosition.getZ(),i,j);
+					if(maze.getGoalPosition().equals(current)){
+						e.gc.drawImage(gold, 0, 0, gold.getBounds().width, gold.getBounds().height, x, y, cellWidth, cellHeight);
+						finish=true;
+					}
+					Position temp=new Position(maze.getGoalPosition().getZ()-2,maze.getGoalPosition().getX(),maze.getGoalPosition().getY());	
+					if(hint && hintPosition.equals(current)){
+						e.gc.drawImage(hintimage, 0, 0, hintimage.getBounds().width, hintimage.getBounds().height, x, y, cellWidth, cellHeight);
+						hint=false;
+					}
+					if(temp.equals(current))
+						e.gc.drawImage(arrowtothegold, 0, 0, arrowtothegold.getBounds().width, arrowtothegold.getBounds().height, x, y, cellWidth, cellHeight);
+					else if(Arrays.asList(maze.getPossibleMoves(current)).contains("Up") && Arrays.asList(maze.getPossibleMoves(current)).contains("Down"))
+						e.gc.drawImage(arrowupanddown, 0, 0, arrowupanddown.getBounds().width, arrowupanddown.getBounds().height, x, y, cellWidth, cellHeight);
+					else if(Arrays.asList(maze.getPossibleMoves(current)).contains("Up") && !Arrays.asList(maze.getPossibleMoves(current)).contains("Down"))
+						e.gc.drawImage(arrowup, 0, 0, arrowup.getBounds().width, arrowup.getBounds().height, x, y, cellWidth, cellHeight);
+					else if(!Arrays.asList(maze.getPossibleMoves(current)).contains("Up") && Arrays.asList(maze.getPossibleMoves(current)).contains("Down")&&!maze.getGoalPosition().equals(current))
+						e.gc.drawImage(arrowdown, 0, 0, arrowdown.getBounds().width, arrowdown.getBounds().height, x, y, cellWidth, cellHeight);
+				}
+			}
+		}
 	}
 	
 	/**
@@ -268,7 +293,6 @@ public class MazeDisplay extends Canvas {
 	 */
 	public void setCurrentPosition(Position p){
 		this.currentPosition=new Position(p);
-
 	}
 
 	/**

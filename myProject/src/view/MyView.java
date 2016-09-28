@@ -33,6 +33,7 @@ public class MyView extends Observable implements View {
 	/** The cli. */
 	private CLI cli;
 	
+	/** The gui. */
 	private GUI gui;
 	
 	/** The in. */
@@ -212,14 +213,23 @@ public class MyView extends Observable implements View {
 
 	}
 	
+	/* (non-Javadoc)
+	 * @see view.View#updateMaze(algorithms.mazeGenerators.Maze3d, java.lang.String)
+	 */
 	public void updateMaze(Maze3d maze, String name){
 		this.gui.displayCurrentMaze(maze, name);
 	}
 	
+	/* (non-Javadoc)
+	 * @see view.View#setHintPositionInGui(algorithms.mazeGenerators.Position)
+	 */
 	public void setHintPositionInGui(Position p){
 		this.gui.setHintPositionMazeDisplay(p);
 	}
 
+	/* (non-Javadoc)
+	 * @see view.View#move(algorithms.mazeGenerators.Position)
+	 */
 	@Override
 	public void move(Position currentPosition) {
 		this.gui.move(currentPosition);
