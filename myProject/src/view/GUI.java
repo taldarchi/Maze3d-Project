@@ -66,7 +66,7 @@ public class GUI extends BaseWindow {
 		GridLayout grid = new GridLayout(2, false);
 		shell.setLayout(grid);
 		shell.setBackgroundMode(SWT.INHERIT_DEFAULT);
-		shell.setBackgroundImage(new Image(null, "resources/images/background.jpg"));
+		shell.setBackgroundImage(new Image(null, getClass().getClassLoader().getResourceAsStream("resources/images/background.jpg")));
 		
 		Composite buttons = new Composite(shell, SWT.NONE);
 		buttons.setLayout(new GridLayout(1, false));

@@ -42,6 +42,8 @@ public class Command_display implements Command {
 	public void doCommand(String string) {
 		Maze3d maze=model.getMazeByName(string).getMaze();
 		view.display(maze,string);
+
+
 	}
 
 }

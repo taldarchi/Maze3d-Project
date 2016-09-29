@@ -2,7 +2,6 @@ package utils;
 
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
@@ -14,7 +13,7 @@ import presenter.Properties;
 public class PropertiesFile {
 
 	/** The properties. */
-	private static Properties properties = new Properties();;
+	private static Properties properties = new Properties();
 	
 	/**
 	 * Write properties.
@@ -22,7 +21,7 @@ public class PropertiesFile {
 	public static void writeProperties() {
 		XMLEncoder encoder;
 		try {
-			encoder = new XMLEncoder(new FileOutputStream("resources/properties/properties.xml"));
+			encoder = new XMLEncoder(new FileOutputStream("resources/properties.xml"));
 			properties.setGeneratorAlgorithm("growing_tree_last");
 			properties.setSearchAlgorithm("bfs");
 			properties.setThreadsNum(5);
@@ -41,7 +40,7 @@ public class PropertiesFile {
 	 */
 	public static void readProperties(String filename) throws FileNotFoundException {
 		XMLDecoder decoder;
-			decoder = new XMLDecoder(new FileInputStream("resources/properties/"+filename));
+			decoder = new XMLDecoder(PropertiesFile.class.getClassLoader().getResourceAsStream("resources/"+filename));
 			properties=(Properties) decoder.readObject();
 			decoder.close();
 	}

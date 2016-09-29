@@ -51,8 +51,11 @@ public class Command_load_maze implements Command {
 				view.printMessage("Maze name already exists, try again");
 			else{
 				model.loadMaze(fileName, nameToSave);
+				try{
 				if(PropertiesFile.getProperties().getUserInterface().equals("gui"))
 					view.updateMaze(model.getMazeByName(nameToSave).getMaze(), nameToSave);
+				}catch(NullPointerException e){
+				}
 			}
 			
 

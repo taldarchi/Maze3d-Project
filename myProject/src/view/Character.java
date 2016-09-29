@@ -21,7 +21,7 @@ public class Character {
 	 * Instantiates a new character.
 	 */
 	public Character() {
-		img = new Image(null, "resources/images/character.png");
+		img = new Image(null, getClass().getClassLoader().getResourceAsStream("resources/images/character.png"));
 	}
 
 	/**

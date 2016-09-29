@@ -520,7 +520,7 @@ public class MyModel extends Observable implements Model{
 	public void readProperties(String filename){
 		try {
 			PropertiesFile.readProperties(filename);
-		} catch (FileNotFoundException e) {
+		} catch (FileNotFoundException|ArrayIndexOutOfBoundsException e) {
 			setChanged();
 			notifyObservers("Properties file not found");
 		}

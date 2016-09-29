@@ -84,14 +84,14 @@ public class MazeDisplay extends Canvas {
 		maze=new Maze3d();
 		character = new Character();
 		character.setPos(new Position(-1, -1, -1));
-		wall = new Image(null,"resources/images/wall.png");
-		arrowup=new Image(null,"resources/images/arrowup.png");
-		arrowdown=new Image(null,"resources/images/arrowdown.png");
-		arrowupanddown=new Image(null,"resources/images/arrowupanddown.png");
-		gold=new Image(null,"resources/images/gold.jpg");
-		arrowtothegold=new Image(null,"resources/images/arrowtothegold.png");
-		winner=new Image(null,"resources/images/winner.png");
-		hintimage=new Image(null,"resources/images/hint.png");
+		wall = new Image(null,getClass().getClassLoader().getResourceAsStream("resources/images/wall.png"));
+		arrowup=new Image(null,getClass().getClassLoader().getResourceAsStream("resources/images/arrowup.png"));
+		arrowdown=new Image(null,getClass().getClassLoader().getResourceAsStream("resources/images/arrowdown.png"));
+		arrowupanddown=new Image(null,getClass().getClassLoader().getResourceAsStream("resources/images/arrowupanddown.png"));
+		gold=new Image(null,getClass().getClassLoader().getResourceAsStream("resources/images/gold.jpg"));
+		arrowtothegold=new Image(null,getClass().getClassLoader().getResourceAsStream("resources/images/arrowtothegold.png"));
+		winner=new Image(null,getClass().getClassLoader().getResourceAsStream("resources/images/winner.png"));
+		hintimage=new Image(null,getClass().getClassLoader().getResourceAsStream("resources/images/hint.png"));
 		finish=false;
 		hint=false;
 						
